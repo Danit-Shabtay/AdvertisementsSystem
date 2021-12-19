@@ -1,1 +1,2 @@
-start chrome.exe "http://localhost:8080" & python -m SimpleHTTPServer 8080
+cd server
+npm start

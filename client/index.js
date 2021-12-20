@@ -1,4 +1,3 @@
-import { configuration } from './configuration.js'
 import { Advertisment } from './Advertisment.js';
 
 const print = (data) => { console.log(data) };
@@ -61,8 +60,40 @@ async function showAdvertismentLoop(advertismentList) {
     }
 }
 
+function getIdFromParams(){
+    const queryString = window.location.search;
+    const urlparams = new URLSearchParams(queryString);
+
+    const id = urlparams.get("id");
+    return id;
+}
+
+function fetchConfiguration(screenId) {
+
+    const apiResult = $.ajax({
+        url: "config?id=" + screenId,
+        contentType: "application/json",
+        dataType: 'json',
+        async: false
+    });
+
+    return apiResult.responseJSON;
+}
+
 function main() {
-    const advertismentList = parseConfiguration(configuration);
+
+    const screenId = getIdFromParams();
+    const config = fetchConfiguration(screenId);
+    const configArrayJson = JSON.parse(config);
+
+    print(configArrayJson);
+
+    if (configArrayJson.length == 0) {
+        print("ERROR empty configuration recieved");
+        return;
+    }
+
+    const advertismentList = parseConfiguration(configArrayJson);
 
     showAdvertismentLoop(advertismentList);
 }

@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"node index.js\" \"start http://localhost:3000/?id=0\""
+    "start": "concurrently \"node index.js\" \"start http://localhost:3000/?id=0\"",
+    "start-server": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "concurrently": "^6.5.1",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.4"
   }
 }

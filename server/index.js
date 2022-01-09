@@ -1,8 +1,14 @@
 const express = require('express');
 const path = require('path');
+const { setupDatabase } = require('./MongoUtils');
+
 const { configuration } = require('./configuration')
+
 const print = (data) => { console.log(data) };
+
+setupDatabase();
 const server = express();
+
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 

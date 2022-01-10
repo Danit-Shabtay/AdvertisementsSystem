@@ -1,6 +1,7 @@
 const configuration =
     [
         {
+            "screenId": 0,
             "name": "one",
             "template": "A",
             "length": 4,
@@ -19,6 +20,7 @@ const configuration =
             "text": ["Adidas 50% sale !!!"]
         },
         {
+            "screenId": 1,
             "name": "two",
             "template": "B",
             "length": 4,
@@ -37,6 +39,7 @@ const configuration =
             "text": ["Nike 30% sale"]
         },
         {
+            "screenId": 2,
             "name": "three",
             "template": "C",
             "length": 4,
@@ -55,6 +58,7 @@ const configuration =
             "text": ["McDonalds, Yummy !"]
         },
         {
+            "screenId": 0,
             "name": "four",
             "template": "D",
             "length": 4,
@@ -73,6 +77,7 @@ const configuration =
             "text": ["Makeup course"]
         },
         {
+            "screenId": 2,
             "name": "five",
             "template": "B",
             "length": 4,
@@ -91,6 +96,7 @@ const configuration =
             "text": ["The best cyber course !!"]
         },
         {
+            "screenId": 1,
             "name": "six",
             "template": "C",
             "length": 4,
@@ -108,7 +114,8 @@ const configuration =
             "images": ["6.jpg"],
             "text": ["AI course - The future is already here !"]
         },
-            {
+        {
+            "screenId": 2,
             "name": "seven",
             "template": "A",
             "length": 4,
@@ -127,6 +134,53 @@ const configuration =
             "text": ["coca cola O_O"]
         }
     ];
+
+/**
+ * Not in use right now.
+ * @param {*} config 
+ * @returns 
+ */
+function parseConfiguration(config) {
+
+    let arr = [];
+
+    config.forEach((element) => {
+        arr.push(element);
+    });
+
+    return arr;
+}
+
+/**
+ * Not in use right now.
+ * @param {*} screenId 
+ * @returns 
+ */
+function getPartialConfiguration(screenId) {
+    const arrSize = configuration.length;
+
+    let numOfGroups = 0;
+
+    if (arrSize % SCREEN_NUMBER == 0) {
+        numOfGroups = arrSize / SCREEN_NUMBER;
+    }
+    else {
+        numOfGroups = (arrSize / SCREEN_NUMBER) + 1;
+    }
+
+    const startIndex = screenId * SCREEN_NUMBER;
+
+    let endIndex = screenId * SCREEN_NUMBER + (SCREEN_NUMBER - 1);
+    
+    if (endIndex >= arrSize) {
+        endIndex = arrSize - 1;
+    }
+
+    const configList = parseConfiguration(configuration);
+    const screenConfiguration = configList.slice(startIndex, endIndex + 1);
+
+    return screenConfiguration;
+}
 
 module.exports = {
     configuration

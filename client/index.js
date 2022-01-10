@@ -7,9 +7,9 @@ const sleep = (ms) => {
 }
 
 /**
- * Parse JSON array and return list of objects.
+ * Parse JSON array of advertisments and return it as list of advertisments objects.
  * 
- * @param {*} config JSON wiht array of Advertisments
+ * @param {*} config JSON array of Advertisments data.
  * @returns List of Advertisment objects
  */
 function parseConfiguration(config) {
@@ -68,10 +68,17 @@ function getIdFromParams(){
     return id;
 }
 
-function fetchConfiguration(screenId) {
+/**
+ * Request advertisment data from the server for this screen,
+ * by the screen ID.
+ * 
+ * @param {*} screenId The identifier of this screen (client).
+ * @returns Array of advertisment for this screen
+ */
+function fetchAdvertisments(screenId) {
 
     const apiResult = $.ajax({
-        url: "config?id=" + screenId,
+        url: "advertisment?id=" + screenId,
         contentType: "application/json",
         dataType: 'json',
         async: false
@@ -83,17 +90,16 @@ function fetchConfiguration(screenId) {
 function main() {
 
     const screenId = getIdFromParams();
-    const config = fetchConfiguration(screenId);
-    const configArrayJson = JSON.parse(config);
+    const advertismentsArray = fetchAdvertisments(screenId);
 
-    print(configArrayJson);
+    print(advertismentsArray);
 
-    if (configArrayJson.length == 0) {
-        print("ERROR empty configuration recieved");
+    if (advertismentsArray.length == 0) {
+        print("Could not received advertisments for this screen");
         return;
     }
 
-    const advertismentList = parseConfiguration(configArrayJson);
+    const advertismentList = parseConfiguration(advertismentsArray);
 
     showAdvertismentLoop(advertismentList);
 }

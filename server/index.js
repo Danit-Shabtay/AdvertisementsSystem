@@ -1,73 +1,65 @@
 const express = require('express');
 const path = require('path');
-const { setupDatabase } = require('./MongoUtils');
-
-const { configuration } = require('./configuration')
-
-const print = (data) => { console.log(data) };
-
-setupDatabase();
-const server = express();
-
+const { setupDatabase, fetchAdvertismentByScreenId } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 
+const print = (data) => { console.log(data) };
+
+const sleep = (ms) => {
+    return new Promise(res => setTimeout(res, ms));
+}
+
+setupDatabase().then(() => {
+    sleep(1000).then(() => {
+        // FOR DEBUG:
+        // Add here function you want to run right after
+        // the database initialized.
+        // 
+        // For example: fetching user from the database:
+        // fetchAdvertismentByScreenId(1);
+    });
+});
+
+const server = express();
+
+/**
+    Return the html page to the client.
+*/
 server.get('/', (req, res) => {
 
     const screenId = Number(req.query.id) % SCREEN_NUMBER;
-    print('New connection from: ' + screenId);
+    print(`New connection from screen ID=${screenId}`);
 
     // Sending html page to the client
     const website = path.join(__dirname, "../client/index.html");
     return res.sendFile(website);
 });
 
-server.get('/config', (req, res) => {
+/**
+    Request example: /advertisment?id=1
+
+    Return the advertisment data to the screen.
+    The query parameter: id, represent the screen ID.
+*/
+server.get('/advertisment', async (req, res) => {
     const screenId = Number(req.query.id) % SCREEN_NUMBER;
 
-    const screenConfiguration = getPartialConfiguration(screenId);
-    print("send configuration" + JSON.stringify(screenConfiguration));
+    print(`Receive request from screen ID=${screenId} for advertisment data`);
 
-    return res.json(JSON.stringify(screenConfiguration));
+    const screenAdvertisment = await fetchAdvertismentByScreenId(screenId);
+    print(`send ${screenAdvertisment.length} advertisment to the screen ID=${screenId}`);
+
+    return res.json(screenAdvertisment);
 });
 
-function parseConfiguration(config) {
-
-    let arr = [];
-
-    config.forEach((element) => {
-        arr.push(element);
-    });
-
-    return arr;
-}
-
-function getPartialConfiguration(screenId) {
-    const arrSize = configuration.length;
-
-    let numOfGroups = 0;
-
-    if (arrSize % SCREEN_NUMBER == 0) {
-        numOfGroups = arrSize / SCREEN_NUMBER;
-    }
-    else {
-        numOfGroups = (arrSize / SCREEN_NUMBER) + 1;
-    }
-
-    const startIndex = screenId * SCREEN_NUMBER;
-
-    let endIndex = screenId * SCREEN_NUMBER + (SCREEN_NUMBER - 1);
-    
-    if (endIndex >= arrSize) {
-        endIndex = arrSize - 1;
-    }
-
-    const configList = parseConfiguration(configuration);
-    const screenConfiguration = configList.slice(startIndex, endIndex + 1);
-
-    return screenConfiguration;
-}
-
+/**
+    Define the public directory of the system.
+    Client request example: /client/img/1.jpg/
+ */
 server.use(express.static('../client'));
 
+/**
+    Initiate the server to start listenting to client requests.
+*/
 server.listen(PORT, () => console.log(`server listening on port: ${PORT}`));

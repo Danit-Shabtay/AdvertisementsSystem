@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
         name: "lslsl",
         template: "A",
         length: 1,
-        //timeFrame: timeFrame,
+        timeFrame: {...},
         images: ["lala"],
         text: ["lalala"]
     });
@@ -16,14 +16,31 @@ const mongoose = require('mongoose');
 */
 
 const AdvertismentSchema = new mongoose.Schema({
+    screenId: Number,
     name: String,
     template: String,
     length: Number,
-    //timeFrame: timeFrame,
+    timeFrame: [
+        {
+            dates: {
+                start: Date,
+                end: Date
+            },
+            days: [Number],
+            time: {
+                start: Date,
+                end: Date
+            }
+        }
+    ],
     images: [String],
     text: [String]
 });
 
+// Create model from the schema
+const AdvertismentModel = mongoose.model('Advertisment', AdvertismentSchema);
+
 module.exports = {
-    AdvertismentSchema
+    AdvertismentSchema,
+    AdvertismentModel
 };

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const URL = "mongodb://127.0.0.1:27017/mydb";
+const DATABASE_URL = "mongodb://127.0.0.1:27017/mydb";
 const { configuration } = require('./configuration'); // configuration = Array of Advertisments
 const { AdvertismentModel } = require("./DataBase/AdvertismentEntity");
 
@@ -27,7 +27,7 @@ async function dropCollection(collectionName) {
     This function should be called only once when starting the server.
 */
 async function setupDatabase() {
-    await connectToDb(URL);
+    await connectToDb(DATABASE_URL);
     await dropCollection("advertisments");
     
     insertAdvertismentData();

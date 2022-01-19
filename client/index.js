@@ -1,27 +1,14 @@
 import { Advertisment } from './Advertisment.js';
 
+const SERVER="localhost:3000";
+
 const print = (data) => { console.log(data) };
 
 const sleep = (ms) => {
     return new Promise(res => setTimeout(res, ms));
 }
-
-/**
- * Parse JSON array of advertisments and return it as list of advertisments objects.
- * 
- * @param {*} config JSON array of Advertisments data.
- * @returns List of Advertisment objects
- */
-function parseConfiguration(config) {
-
-    let advertismentList = [];
-
-    config.forEach((element) => {
-        const currentAdvertisment = new Advertisment(element.name, element.template, element.length, element.timeFrame, element.images, element.text);
-        advertismentList.push(currentAdvertisment);
-    });
-
-    return advertismentList;
+function getTime(date) {
+    return new Date(0, 0, 0, date.getHours());
 }
 
 function showAdvertisment(advertismentToShow) {
@@ -48,15 +35,27 @@ function showAdvertisment(advertismentToShow) {
     });
 }
 
-async function showAdvertismentLoop(advertismentList) {
-
-    while (true) {
-        for (let i = 0; i < advertismentList.length; ++i) {
-            const advertisment = advertismentList[i];
-            
-            showAdvertisment(advertisment);
-            await sleep(advertisment.length * 1000);
-        }
+async function showAdvertismentLoop(screenId) {
+    while(true){
+        await fetch('http://'+SERVER+"/advertisment?id=" + screenId)
+        .then(response =>response.json())
+        .then(async function(data){
+            for(var i=0;i<data.length;i++){
+                for(var j=0;j<data[i].timeFrame.length;j++){
+                    var currTF=data[i].timeFrame[j];
+                    var todaysDate=(new Date()).getTime();
+                    var startDate = (new Date(currTF.dates.start)).getTime() - todaysDate;
+                    var endDate = (new Date(currTF.dates.end)).getTime() - todaysDate;
+                    var nowHour=getTime(new Date());
+                    var startHour = getTime((new Date(currTF.time.start))) - nowHour;
+                    var endHour = getTime((new Date(currTF.time.end))) - nowHour;
+                    if (startDate <= 0 && endDate >= 0 && startHour <= 0 && endHour >= 0 && currTF.days.includes(new Date().getDay())) {
+                        showAdvertisment(data[i]);
+                        await sleep(data[i].length*1000);
+                    }
+                }
+            }
+        })
     }
 }
 
@@ -68,40 +67,9 @@ function getIdFromParams(){
     return id;
 }
 
-/**
- * Request advertisment data from the server for this screen,
- * by the screen ID.
- * 
- * @param {*} screenId The identifier of this screen (client).
- * @returns Array of advertisment for this screen
- */
-function fetchAdvertisments(screenId) {
-
-    const apiResult = $.ajax({
-        url: "advertisment?id=" + screenId,
-        contentType: "application/json",
-        dataType: 'json',
-        async: false
-    });
-
-    return apiResult.responseJSON;
-}
-
 function main() {
-
     const screenId = getIdFromParams();
-    const advertismentsArray = fetchAdvertisments(screenId);
-
-    print(advertismentsArray);
-
-    if (advertismentsArray.length == 0) {
-        print("Could not received advertisments for this screen");
-        return;
-    }
-
-    const advertismentList = parseConfiguration(advertismentsArray);
-
-    showAdvertismentLoop(advertismentList);
+    showAdvertismentLoop(screenId);
 }
 
 main();

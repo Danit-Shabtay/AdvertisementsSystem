@@ -23,13 +23,13 @@ const AdvertismentSchema = new mongoose.Schema({
     timeFrame: [
         {
             dates: {
-                start: Date,
-                end: Date
+                start: String,
+                end: String
             },
             days: [Number],
             time: {
-                start: Date,
-                end: Date
+                start: String,
+                end: String
             }
         }
     ],

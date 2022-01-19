@@ -6,20 +6,7 @@ const SCREEN_NUMBER = 3;
 
 const print = (data) => { console.log(data) };
 
-const sleep = (ms) => {
-    return new Promise(res => setTimeout(res, ms));
-}
-
-setupDatabase().then(() => {
-    sleep(1000).then(() => {
-        // FOR DEBUG:
-        // Add here function you want to run right after
-        // the database initialized.
-        // 
-        // For example: fetching user from the database:
-        // fetchAdvertismentByScreenId(1);
-    });
-});
+setupDatabase();
 
 const server = express();
 

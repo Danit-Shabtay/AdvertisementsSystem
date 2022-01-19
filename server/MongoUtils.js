@@ -11,14 +11,6 @@ async function connectToDb(databaseUrl) {
 }
 
 /**
-    Delete the entire collection by it's collection's name.
-*/
-async function dropCollection(collectionName) {
-    return mongoose.connection.db.dropCollection(collectionName)
-        .then(console.log(`Drop collection: ${collectionName}`));
-}
-
-/**
     Initialize the database according to the requierments:
     1. Establish connection with the database
     2. Drop any exsiting collection & data
@@ -28,7 +20,7 @@ async function dropCollection(collectionName) {
 */
 async function setupDatabase() {
     await connectToDb(DATABASE_URL);
-    await dropCollection("advertisments");
+    await mongoose.connection.db.dropDatabase();
     
     insertAdvertismentData();
 }

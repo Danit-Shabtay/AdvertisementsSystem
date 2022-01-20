@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const { ScreenModel } = require('./DataBase/ScreenEntity');
 const { setupDatabase, fetchAdvertismentByScreenId } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
@@ -31,6 +32,16 @@ server.get('/', (req, res) => {
 */
 server.get('/advertisment', async (req, res) => {
     const screenId = Number(req.query.id) % SCREEN_NUMBER;
+
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    print(today);
+
+   // **TODO** -Maor
+    //var screen = new ScreenModel({ screenId: 1, lastConnection:today });
+	//await screen.save();
 
     print(`Receive request from screen ID=${screenId} for advertisment data`);
 

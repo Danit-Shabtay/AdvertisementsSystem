@@ -1,3 +1,4 @@
+//ads
 const configuration =
     [
         {
@@ -134,6 +135,13 @@ const configuration =
             "text": ["coca cola O_O"]
         }
     ];
+    const admins =
+        [
+            {
+             "username": "admin",
+            "password": "password"
+            }
+        ];
 
 /**
  * Not in use right now.
@@ -183,5 +191,6 @@ function getPartialConfiguration(screenId) {
 }
 
 module.exports = {
-    configuration
+    configuration,
+    admins
 };

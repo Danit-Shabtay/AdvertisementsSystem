@@ -38,7 +38,7 @@ const AdvertismentSchema = new mongoose.Schema({
 });
 
 // Create model from the schema
-const AdvertismentModel = mongoose.model('Advertisment', AdvertismentSchema);
+const AdvertismentModel = mongoose.model('Advertisments', AdvertismentSchema);
 
 module.exports = {
     AdvertismentSchema,

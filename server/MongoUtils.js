@@ -1,21 +1,14 @@
 const mongoose = require('mongoose');
 const DATABASE_URL = "mongodb://127.0.0.1:27017/mydb";
-const { configuration } = require('./configuration'); // configuration = Array of Advertisments
+const { configuration, admins } = require('./configuration'); // configuration = Array of Advertisments
 const { AdvertismentModel } = require("./DataBase/AdvertismentEntity");
+const { AdminModel } = require("./DataBase/AdminEntity");
 
 /**
     Establish connection with the database using it's URL address.
 */
 async function connectToDb(databaseUrl) {
     return mongoose.connect(databaseUrl);
-}
-
-/**
-    Delete the entire collection by it's collection's name.
-*/
-async function dropCollection(collectionName) {
-    return mongoose.connection.db.dropCollection(collectionName)
-        .then(console.log(`Drop collection: ${collectionName}`));
 }
 
 /**
@@ -28,9 +21,11 @@ async function dropCollection(collectionName) {
 */
 async function setupDatabase() {
     await connectToDb(DATABASE_URL);
-    await dropCollection("advertisments");
+    await mongoose.connection.db.dropDatabase();
     
     insertAdvertismentData();
+    insertAdminData();
+
 }
 
 /**
@@ -96,7 +91,21 @@ async function insertAdvertismentData() {
         const tempAdvertisment = new AdvertismentModel(element);
         console.log(`Insert new advertisment, ID=${tempAdvertisment._id}`);
         tempAdvertisment.save();
-    });   
+    });
+
+}
+
+/**
+    Read the local data of the admins
+    and saves them to the database.
+*/
+async function insertAdminData() {
+    admins.forEach((element) => {
+        const tempAdmin = new AdminModel(element);
+        console.log(`Insert new admin, ID=${tempAdmin._id}`);
+        tempAdmin.save();
+    });
+       
 }
 
 module.exports = {

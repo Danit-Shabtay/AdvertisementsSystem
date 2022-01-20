@@ -23,13 +23,13 @@ const AdvertismentSchema = new mongoose.Schema({
     timeFrame: [
         {
             dates: {
-                start: Date,
-                end: Date
+                start: String,
+                end: String
             },
             days: [Number],
             time: {
-                start: Date,
-                end: Date
+                start: String,
+                end: String
             }
         }
     ],
@@ -38,7 +38,7 @@ const AdvertismentSchema = new mongoose.Schema({
 });
 
 // Create model from the schema
-const AdvertismentModel = mongoose.model('Advertisment', AdvertismentSchema);
+const AdvertismentModel = mongoose.model('Advertisments', AdvertismentSchema);
 
 module.exports = {
     AdvertismentSchema,

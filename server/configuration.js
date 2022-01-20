@@ -1,19 +1,20 @@
+//ads
 const configuration =
     [
         {
             "screenId": 0,
-            "name": "one",
+            "name": "Adidas",
             "template": "A",
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": new Date(2021, 0),
-                    "end": new Date(2022, 11)
+                    "start": "2021-11-01",
+                    "end": "2022-11-01"
                 },
-                "days": [0, 1, 2, 3, 4, 5, 6],
+                "days": [0,1,2,3,4,5,6],
                 "time": {
-                    "start": new Date(0, 0, 0, 0),
-                    "end": new Date(0, 0, 0, 23)
+                    "start": "2000-01-01T00:00:00",
+                    "end": "2000-01-01T23:00:00"
                 }
             }],
             "images": ["1.jpg"],
@@ -21,18 +22,18 @@ const configuration =
         },
         {
             "screenId": 1,
-            "name": "two",
+            "name": "Nike",
             "template": "B",
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": new Date(2021, 2),
-                    "end": new Date(2022, 3)
+                    "start": "2021-11-01",
+                    "end": "2022-11-01"
                 },
-                "days": [0, 1, 2, 3, 4, 5, 6],
+                "days": [0,1,2,3,4,5,6],
                 "time": {
-                    "start": new Date(0, 0, 0, 0),
-                    "end": new Date(0, 0, 0, 23)
+                    "start": "2000-01-01T00:00:00",
+                    "end": "2000-01-01T23:00:00"
                 }
             }],
             "images": ["2.jpg"],
@@ -40,18 +41,18 @@ const configuration =
         },
         {
             "screenId": 2,
-            "name": "three",
+            "name": "McDonalds",
             "template": "C",
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": new Date(2021, 4),
-                    "end": new Date(2022, 5, 15)
+                    "start": "2021-11-01",
+                    "end": "2022-11-01"
                 },
-                "days": [0, 1, 2, 3, 4, 5, 6],
+                "days": [0,1,2,3,4,5,6],
                 "time": {
-                    "start": new Date(0, 0, 0, 1),
-                    "end": new Date(0, 0, 0, 23)
+                    "start": "2000-01-01T00:00:00",
+                    "end": "2000-01-01T23:00:00"
                 }
             }],
             "images": ["3.jpg"],
@@ -59,18 +60,18 @@ const configuration =
         },
         {
             "screenId": 0,
-            "name": "four",
+            "name": "Makeup course",
             "template": "D",
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": new Date(2021, 2, 29),
-                    "end": new Date(2022, 4, 15)
+                    "start": "2021-11-01",
+                    "end": "2022-11-01"
                 },
-                "days": [3],
+                "days": [0,1,2,3,4,5,6],
                 "time": {
-                    "start": new Date(0, 0, 0, 1),
-                    "end": new Date(0, 0, 0, 19)
+                    "start": "2000-01-01T00:00:00",
+                    "end": "2000-01-01T23:00:00"
                 }
             }],
             "images": ["4.jpg"],
@@ -78,18 +79,18 @@ const configuration =
         },
         {
             "screenId": 2,
-            "name": "five",
+            "name": "cyber course",
             "template": "B",
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": new Date(2021, 2, 29),
-                    "end": new Date(2022, 4, 15)
+                    "start": "2021-11-01",
+                    "end": "2022-11-01"
                 },
-                "days": [3],
+                "days": [0,1,2,3,4,5,6],
                 "time": {
-                    "start": new Date(0, 0, 0, 1),
-                    "end": new Date(0, 0, 0, 19)
+                    "start": "2000-01-01T00:00:00",
+                    "end": "2000-01-01T23:00:00"
                 }
             }],
             "images": ["5.jpg"],
@@ -97,18 +98,18 @@ const configuration =
         },
         {
             "screenId": 1,
-            "name": "six",
+            "name": "AI course",
             "template": "C",
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": new Date(2021, 2, 29),
-                    "end": new Date(2022, 4, 15)
+                    "start": "2021-11-01",
+                    "end": "2022-11-01"
                 },
-                "days": [3],
+                "days": [0,1,2,3,4,5,6],
                 "time": {
-                    "start": new Date(0, 0, 0, 1),
-                    "end": new Date(0, 0, 0, 19)
+                    "start": "2000-01-01T00:00:00",
+                    "end": "2000-01-01T23:00:00"
                 }
             }],
             "images": ["6.jpg"],
@@ -116,24 +117,31 @@ const configuration =
         },
         {
             "screenId": 2,
-            "name": "seven",
+            "name": "coca cola",
             "template": "A",
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": new Date(2021, 2, 29),
-                    "end": new Date(2022, 4, 15)
+                    "start": "2021-11-01",
+                    "end": "2022-11-01"
                 },
-                "days": [3],
+                "days": [0,1,2,3,4,5,6],
                 "time": {
-                    "start": new Date(0, 0, 0, 1),
-                    "end": new Date(0, 0, 0, 19)
+                    "start": "2000-01-01T00:00:00",
+                    "end": "2000-01-01T23:00:00"
                 }
             }],
             "images": ["7.jpg"],
             "text": ["coca cola O_O"]
         }
     ];
+    const admins =
+        [
+            {
+             "username": "admin",
+            "password": "password"
+            }
+        ];
 
 /**
  * Not in use right now.
@@ -183,5 +191,6 @@ function getPartialConfiguration(screenId) {
 }
 
 module.exports = {
-    configuration
+    configuration,
+    admins
 };

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module" src="Login.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+  <body style="text-align: center; margin: 0 auto">
+    <h2>Administrator Login</h2>
+    <form action="action_page.php">
+      <div class="imgcontainer">
+        <img src="./img/profile-user.png" alt="Avatar" class="avatar">
+        </div>
+    <div class="container">
+    <p>Please fill your user name and password in order to login</p>
+    <hr>
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" id="username" required>
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+    <!-- <div id="adminLogin"></div> -->
+    
+    <button type="submit" class="loginbtn">Login</button>
+</div>  
+</form>
+</body>
+</html>

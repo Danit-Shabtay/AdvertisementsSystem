@@ -54,21 +54,6 @@ server.get('/advertisment', async (req, res) => {
     return res.json(screenAdvertisment);
 });
 
-server.get('/maor', (req, res) => {
-
-    var date = new Date();
-    var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
-
-    /*ScreenModel.find({lastConnection: { $lte:isoDateTime},function(err,result){
-        res.write(result);
-    }})*/
-    ScreenModel.find({},function(err,result){
-        res.write(result);
-    })
-    res.write("jhtyjtuyrfuyrf");
-    res.end();
-})
-
 /**
     Define the public directory of the system.
     Client request example: /client/img/1.jpg/

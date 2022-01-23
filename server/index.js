@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
-const { setupDatabase, fetchAdvertismentByScreenId } = require('./MongoUtils');
+const { AdminModel} = require('./DataBase/AdminEntity');
+const { setupDatabase, fetchAdvertismentByScreenId ,findIfAdminExists} = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 
@@ -14,14 +15,29 @@ const server = express();
 /**
     Return the html page to the client.
 */
-server.get('/', (req, res) => {
+server.get('/', (req, res) => {// Sending html page to the client
 
     const screenId = Number(req.query.id) % SCREEN_NUMBER;
     print(`New connection from screen ID=${screenId}`);
-
-    // Sending html page to the client
-    const website = path.join(__dirname, "../client/index.html");
+    var website;
+    if ( Number(req.query.id) ==0 )
+    {
+        website = path.join(__dirname, "../client/login.html");
+    }
+    else{
+        website = path.join(__dirname, "../client/index.html");
+    }
     return res.sendFile(website);
+});
+server.get('/login', (req, res) => {// Sending html page to the client
+
+    const userName = req.query.userName;
+    const password = req.query.password;
+    var website;
+        website = path.join(__dirname, "../client/login.html"); 
+        var trueOrFalse = findIfAdminExists("admin","password") ;
+        console.log(trueOrFalse);
+        return res.sendFile(website);
 });
 
 /**

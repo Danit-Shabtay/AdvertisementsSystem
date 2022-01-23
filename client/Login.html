@@ -3,12 +3,12 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="module" src="Login.js"></script>
+    <script type="module" src="../server/login.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
   <body style="text-align: center; margin: 0 auto">
     <h2>Administrator Login</h2>
-    <form action="action_page.php">
+    <form  id="POST">
       <div class="imgcontainer">
         <img src="./img/profile-user.png" alt="Avatar" class="avatar">
         </div>
@@ -21,8 +21,17 @@
     <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
     <!-- <div id="adminLogin"></div> -->
     
-    <button type="submit" class="loginbtn">Login</button>
+    <button type="submit" class="loginbtn" onclick="returnData()">Login</button>
 </div>  
 </form>
+<script>function returnData(){
+    var userName = document.getElementById("username").value;
+    var password = document.getElementById("psw").value;
+    alert(userName);
+    alert(password);
+    console.log(password)
+
+}
+</script>
 </body>
 </html>

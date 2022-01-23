@@ -108,9 +108,42 @@ async function insertAdminData() {
        
 }
 
+
+// async function adminExistsInDb(adminName) {
+//     // SELECT FROM Advertisment
+//     // WHERE Name = advertismentName
+     
+//         admins.forEach((element) => {
+//             const tempAdmin = new AdminModel(element);
+//             console.log(`Insert new admin, ID=${tempAdmin._id}`);
+//             tempAdmin.save();
+//         });
+           
+//     }
+
+async function findIfAdminExists(adminName,password) {
+    
+    // SELECT FROM Advertisment
+    // WHERE Name = advertismentName
+    AdminModel.find({
+        username: adminName,
+        password: password
+    },function(err,result){
+        // console.log(result)
+        if (result.length == 0)
+        {
+           return true;
+        }
+        else{
+            return false
+        }
+    })
+        
+    }
+
 module.exports = {
     setupDatabase,
     fetchAdvertismentByName,
-    fetchAdvertismentByScreenId
+    fetchAdvertismentByScreenId,
+    findIfAdminExists
 };
-

@@ -1,11 +1,96 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="module" src="Admin.js"></script>
-  </head>
-  <body style="text-align: center; margin: 0 auto">
-    <h2>Advertisements Screen</h2>
-    <div id="advertisment"></div>
-  </body>
+<html lang="en">
+  
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+  
+    <!-- INCLUDING JQUERY-->
+    <script src=
+"https://code.jquery.com/jquery-3.5.1.js">
+    </script>
+  
+    <!-- CSS FOR STYLING THE PAGE -->
+    <style>
+        table {
+            margin: 0 auto;
+            font-size: large;
+            border: 1px solid black;
+        }
+  
+        h1 {
+            text-align: center;
+            color: #006600;
+            font-size: xx-large;
+            font-family: 'Gill Sans', 
+                'Gill Sans MT', ' Calibri', 
+                'Trebuchet MS', 'sans-serif';
+        }
+  
+        td {
+            background-color: #E4F5D4;
+            border: 1px solid black;
+        }
+  
+        th,
+        td {
+            font-weight: bold;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+  
+        td {
+            font-weight: lighter;
+        }
+    </style>
+</head>
+  
+<body>
+    <section>
+        <h1>Advertisements System-Admin Page</h1>
+        <!-- TABLE CONSTRUCTION-->
+        <table id='table'>
+            <!-- HEADING FORMATION -->
+            <tr>
+              <a>
+                <th>Name</th>
+                <th>Screen Number</th>
+                <th>Template</th>
+                <th>Length</th>
+                <th>Starting Date</th>
+                <th>Ending Date</th>
+                <th>Starting Time</th>
+                <th>Ending Time</th>
+              </a>
+            </tr>
+  
+            <script>
+              const SERVER="localhost:3000";
+              $(document).ready(function () {
+              fetch('http://'+SERVER+"/advertisment?id=0")
+               .then(response =>response.json())
+               .then(async function(data){
+                var content = '';
+                  for(var i=0;i<data.length;i++){
+                    //CONSTRUCTION OF ROWS HAVING
+                            // DATA FROM JSON OBJECT
+                            content += '<tr>';
+                            content+='<td><a href="https://google.com">'+data[i].name+'</a></td>'
+                            content += '<td>' + data[i].screenId + '</td>'; 
+                            content += '<td>' + data[i].template + '</td>'; 
+                            content += '<td>' + data[i].length + '</td>';
+                            content += '<td>' + new Date(data[i].timeFrame[0].dates.start).toLocaleDateString() + '</td>';
+                            content += '<td>' + new Date(data[i].timeFrame[0].dates.end).toLocaleDateString() + '</td>'; 
+                            content += '<td>' + new Date(data[i].timeFrame[0].time.start).toLocaleTimeString() + '</td>';
+                            content += '<td>' + new Date(data[i].timeFrame[0].time.end).toLocaleTimeString() + '</td>'; 
+                            content += '</tr>';
+                  }
+                          //INSERTING ROWS INTO TABLE 
+                          $('#table').append(content);
+                })
+              })
+            </script>
+    </section>
+</body>
+  
 </html>

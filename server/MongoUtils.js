@@ -53,6 +53,14 @@ async function fetchAdvertismentByScreenId(screenId) {
         screenId: screenId
     });
 }
+/**
+ * Fetch advertisment data of all advertisment screenID.
+ * @returns Advertisment data.
+ */
+ async function fetchAllAdvertisment() {
+    // SELECT FROM Advertisment
+    return AdvertismentModel.find({});
+}
 
 /**
  * TODO
@@ -111,6 +119,7 @@ async function insertAdminData() {
 module.exports = {
     setupDatabase,
     fetchAdvertismentByName,
-    fetchAdvertismentByScreenId
+    fetchAdvertismentByScreenId,
+    fetchAllAdvertisment
 };
 

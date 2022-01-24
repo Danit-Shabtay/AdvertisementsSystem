@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
-const { setupDatabase, fetchAdvertismentByScreenId } = require('./MongoUtils');
+const { setupDatabase, fetchAdvertismentByScreenId, fetchAllAdvertisment } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 
@@ -39,16 +39,23 @@ server.get('/', (req, res) => {
     The query parameter: id, represent the screen ID.
 */
 server.get('/advertisment', async (req, res) => {
+
     const screenId = Number(req.query.id);
-
-    var date = new Date();
-    var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
-
-    await ScreenModel.updateOne({ _id: screenId }, { $set: { lastConnection: isoDateTime } });
-
     print(`Receive request from screen ID=${screenId} for advertisment data`);
+    var screenAdvertisment;
+    res.header("Access-Control-Allow-Origin", "*");
 
-    const screenAdvertisment = await fetchAdvertismentByScreenId(screenId% SCREEN_NUMBER);
+    if(screenId!=0){//if the request is from regular client
+        var date = new Date();
+        var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+
+        await ScreenModel.updateOne({ _id: screenId }, { $set: { lastConnection: isoDateTime } });
+
+        screenAdvertisment = await fetchAdvertismentByScreenId(screenId% SCREEN_NUMBER);
+    }
+    else{//if the request is from the admin client
+        screenAdvertisment = await fetchAllAdvertisment();
+    }
     print(`send ${screenAdvertisment.length} advertisment to the screen ID=${screenId}`);
 
     return res.json(screenAdvertisment);

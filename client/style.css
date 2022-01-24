@@ -5,6 +5,10 @@ form {
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+.container {
+  text-align: center;
+  margin: 0 auto;
+}
 
 /* Full-width inputs */
 input[type="text"],

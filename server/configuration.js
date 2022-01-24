@@ -66,7 +66,7 @@ const configuration =
             "timeFrame": [{
                 "dates": {
                     "start": "2021-11-01",
-                    "end": "2022-11-01"
+                    "end": "2023-11-15"
                 },
                 "days": [0,1,2,3,4,5,6],
                 "time": {
@@ -81,10 +81,10 @@ const configuration =
             "screenId": 2,
             "name": "cyber course",
             "template": "B",
-            "length": 4,
+            "length": 5,
             "timeFrame": [{
                 "dates": {
-                    "start": "2021-11-01",
+                    "start": "2019-11-01",
                     "end": "2022-11-01"
                 },
                 "days": [0,1,2,3,4,5,6],
@@ -122,8 +122,8 @@ const configuration =
             "length": 4,
             "timeFrame": [{
                 "dates": {
-                    "start": "2021-11-01",
-                    "end": "2022-11-01"
+                    "start": "2021-11-20",
+                    "end": "2022-12-01"
                 },
                 "days": [0,1,2,3,4,5,6],
                 "time": {

@@ -1,5 +1,3 @@
-import { Advertisment } from './Advertisment.js';
-
 const SERVER="localhost:3000";
 
 const print = (data) => { console.log(data) };

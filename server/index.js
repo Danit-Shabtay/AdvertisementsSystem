@@ -5,8 +5,8 @@ const { AdminModel} = require('./DataBase/AdminEntity');
 const { setupDatabase, fetchAdvertismentByScreenId ,findIfAdminExists} = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
-
 const print = (data) => { console.log(data) };
+
 
 setupDatabase();
 
@@ -15,12 +15,12 @@ const server = express();
 /**
     Return the html page to the client.
 */
-server.get('/', (req, res) => {// Sending html page to the client
+server.get  ('/',async (req, res) => {// Sending html page to the client
 
     const screenId = Number(req.query.id) % SCREEN_NUMBER;
     print(`New connection from screen ID=${screenId}`);
     var website;
-    if ( Number(req.query.id) ==0 )
+    if ( Number(req.query.id) == 0 )
     {
         website = path.join(__dirname, "../client/login.html");
     }
@@ -29,15 +29,18 @@ server.get('/', (req, res) => {// Sending html page to the client
     }
     return res.sendFile(website);
 });
-server.get('/login', (req, res) => {// Sending html page to the client
-
-    const userName = req.query.userName;
-    const password = req.query.password;
-    var website;
-        website = path.join(__dirname, "../client/login.html"); 
-        var trueOrFalse = findIfAdminExists("admin","password") ;
-        console.log(trueOrFalse);
+server.get('/login', async (req, res) => {// Sending html page to the client
+        // const userName = req.query.userName;
+        // const password = req.query.password;
+        const trueOrFalse = await findIfAdminExists("admin","password");
+        if(trueOrFalse.length==1){
+            console.log("found");
+            return res.sendFile(website)
+        }
+        else{
+            console.log("not found");
         return res.sendFile(website);
+        }
 });
 
 /**
@@ -48,7 +51,6 @@ server.get('/login', (req, res) => {// Sending html page to the client
 */
 server.get('/advertisment', async (req, res) => {
     const screenId = Number(req.query.id) % SCREEN_NUMBER;
-
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();

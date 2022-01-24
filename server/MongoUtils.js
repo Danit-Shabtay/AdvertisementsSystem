@@ -3,6 +3,7 @@ const DATABASE_URL = "mongodb://127.0.0.1:27017/mydb";
 const { configuration, admins } = require('./configuration'); // configuration = Array of Advertisments
 const { AdvertismentModel } = require("./DataBase/AdvertismentEntity");
 const { AdminModel } = require("./DataBase/AdminEntity");
+const { ScreenModel } = require("./DataBase/ScreenEntity");
 
 /**
     Establish connection with the database using it's URL address.
@@ -25,7 +26,6 @@ async function setupDatabase() {
     
     insertAdvertismentData();
     insertAdminData();
-
 }
 
 /**
@@ -53,6 +53,7 @@ async function fetchAdvertismentByScreenId(screenId) {
         screenId: screenId
     });
 }
+
 /**
  * Fetch advertisment data of all advertisment screenID.
  * @returns Advertisment data.
@@ -60,6 +61,15 @@ async function fetchAdvertismentByScreenId(screenId) {
  async function fetchAllAdvertisment() {
     // SELECT FROM Advertisment
     return AdvertismentModel.find({});
+}
+
+/**
+ * Fetch screen data of all the screens.
+ * @returns Screens data sorted by last connection date and time.
+ */
+ async function fetchAllScreensData() {
+    // SELECT FROM screens
+    return ScreenModel.find({}).sort({lastConnection: -1});
 }
 
 /**
@@ -100,7 +110,6 @@ async function insertAdvertismentData() {
         console.log(`Insert new advertisment, ID=${tempAdvertisment._id}`);
         tempAdvertisment.save();
     });
-
 }
 
 /**
@@ -112,14 +121,13 @@ async function insertAdminData() {
         const tempAdmin = new AdminModel(element);
         console.log(`Insert new admin, ID=${tempAdmin._id}`);
         tempAdmin.save();
-    });
-       
+    });    
 }
 
 module.exports = {
     setupDatabase,
     fetchAdvertismentByName,
     fetchAdvertismentByScreenId,
-    fetchAllAdvertisment
+    fetchAllAdvertisment,
+    fetchAllScreensData
 };
-

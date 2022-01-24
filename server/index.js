@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
-const { setupDatabase, fetchAdvertismentByScreenId, fetchAllAdvertisment } = require('./MongoUtils');
+const { setupDatabase, fetchAdvertismentByScreenId, fetchAllAdvertisment, fetchAllScreensData } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 
@@ -59,6 +59,20 @@ server.get('/advertisment', async (req, res) => {
     print(`send ${screenAdvertisment.length} advertisment to the screen ID=${screenId}`);
 
     return res.json(screenAdvertisment);
+});
+
+/**
+    Request example: /screens
+
+    Return the screens data.
+*/
+server.get('/screens', async (req, res) => {
+
+    print(`Receive request for screens data`);
+    res.header("Access-Control-Allow-Origin", "*");
+    
+    const screens = await fetchAllScreensData();
+    return res.json(screens);
 });
 
 /**

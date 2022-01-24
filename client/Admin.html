@@ -5,9 +5,7 @@
     <title>Admin Page</title>
   
     <!-- INCLUDING JQUERY-->
-    <script src=
-"https://code.jquery.com/jquery-3.5.1.js">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   
     <!-- CSS FOR STYLING THE PAGE -->
     <style>
@@ -48,49 +46,72 @@
 <body>
     <section>
         <h1>Advertisements System-Admin Page</h1>
-        <!-- TABLE CONSTRUCTION-->
-        <table id='table'>
-            <!-- HEADING FORMATION -->
+        <br>
+        <h1>The Advertisements</h1>
+        <table id='adsTable'>
             <tr>
-              <a>
-                <th>Name</th>
-                <th>Screen Number</th>
-                <th>Template</th>
-                <th>Length</th>
-                <th>Starting Date</th>
-                <th>Ending Date</th>
-                <th>Starting Time</th>
-                <th>Ending Time</th>
-              </a>
+              <th>Name</th>
+              <th>Screen Number</th>
+              <th>Template</th>
+              <th>Length</th>
+              <th>Starting Date</th>
+              <th>Ending Date</th>
+              <th>Starting Time</th>
+              <th>Ending Time</th>
             </tr>
+        </table>
+            <br>
+            <h1>All Screens- sorted by last connection time</h1>
+            <table id='screensTable'>
+                <tr>
+                  <th>Screen Number</th>
+                  <th>Last Connection Date And Time</th>
+                </tr>
+            </table>
+            <br>
   
             <script>
               const SERVER="localhost:3000";
               $(document).ready(function () {
               fetch('http://'+SERVER+"/advertisment?id=0")
                .then(response =>response.json())
-               .then(async function(data){
+               .then(function(data){
                 var content = '';
                   for(var i=0;i<data.length;i++){
-                    //CONSTRUCTION OF ROWS HAVING
-                            // DATA FROM JSON OBJECT
-                            content += '<tr>';
-                            content+='<td><a href="https://google.com">'+data[i].name+'</a></td>'
-                            content += '<td>' + data[i].screenId + '</td>'; 
-                            content += '<td>' + data[i].template + '</td>'; 
-                            content += '<td>' + data[i].length + '</td>';
-                            content += '<td>' + new Date(data[i].timeFrame[0].dates.start).toLocaleDateString() + '</td>';
-                            content += '<td>' + new Date(data[i].timeFrame[0].dates.end).toLocaleDateString() + '</td>'; 
-                            content += '<td>' + new Date(data[i].timeFrame[0].time.start).toLocaleTimeString() + '</td>';
-                            content += '<td>' + new Date(data[i].timeFrame[0].time.end).toLocaleTimeString() + '</td>'; 
-                            content += '</tr>';
+                    //Construction of rows having data from json object
+                    content += '<tr>';
+                    content+='<td><a href="https://google.com">'+data[i].name+'</a></td>'
+                    content += '<td>' + data[i].screenId + '</td>'; 
+                    content += '<td>' + data[i].template + '</td>'; 
+                    content += '<td>' + data[i].length + '</td>';
+                    content += '<td>' + new Date(data[i].timeFrame[0].dates.start).toLocaleDateString() + '</td>';
+                    content += '<td>' + new Date(data[i].timeFrame[0].dates.end).toLocaleDateString() + '</td>'; 
+                    content += '<td>' + new Date(data[i].timeFrame[0].time.start).toLocaleTimeString() + '</td>';
+                    content += '<td>' + new Date(data[i].timeFrame[0].time.end).toLocaleTimeString() + '</td>'; 
+                    content += '</tr>';
                   }
-                          //INSERTING ROWS INTO TABLE 
-                          $('#table').append(content);
+                  //Inserting rows into table 
+                  $('#adsTable').append(content);
                 })
               })
+
+              fetch('http://'+SERVER+"/screens")
+               .then(response =>response.json())
+               .then(function(data){
+                var content = '';
+                  for(var i=0;i<data.length;i++){
+                    //Construction of rows having data from json object
+                    content += '<tr>';
+                    content += '<td>' + data[i]._id + '</td>';
+                    const date=new Date(data[i].lastConnection);
+                    content += '<td>' + date.toLocaleDateString()+" "+date.toLocaleTimeString()+ '</td>';
+                    content += '</tr>';
+                  }
+                  //Inserting rows into table 
+                  $('#screensTable').append(content);
+                })
             </script>
     </section>
 </body>
-  
+
 </html>

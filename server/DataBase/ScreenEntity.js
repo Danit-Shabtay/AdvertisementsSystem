@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ScreenSchema = new mongoose.Schema({
-    screenId: Number,
+    _id: Number,
     lastConnection: Date
 });
 

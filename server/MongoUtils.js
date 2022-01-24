@@ -3,6 +3,7 @@ const DATABASE_URL = "mongodb://127.0.0.1:27017/mydb";
 const { configuration, admins } = require('./configuration'); // configuration = Array of Advertisments
 const { AdvertismentModel } = require("./DataBase/AdvertismentEntity");
 const { AdminModel } = require("./DataBase/AdminEntity");
+const e = require('express');
 
 /**
     Establish connection with the database using it's URL address.
@@ -121,25 +122,32 @@ async function insertAdminData() {
            
 //     }
 
+// async function findIfAdminExists(adminName,password) {
+//     // SELECT FROM Advertisment
+//     // WHERE Name = advertismentName
+//     AdminModel.find({
+//         username: adminName,
+//         password: password
+//     }, function(err,result){
+//         // console.log(result)
+//         if (result.length == 1)
+//         {
+//               return true;;
+//         }
+//         console.log("insid  ");
+//         return false;
+//     })
+        
+//     }
+
 async function findIfAdminExists(adminName,password) {
-    
     // SELECT FROM Advertisment
     // WHERE Name = advertismentName
-    AdminModel.find({
+    return AdminModel.find({
         username: adminName,
         password: password
-    },function(err,result){
-        // console.log(result)
-        if (result.length == 0)
-        {
-           return true;
-        }
-        else{
-            return false
-        }
-    })
-        
-    }
+    });
+}
 
 module.exports = {
     setupDatabase,

@@ -4,6 +4,7 @@ const { configuration, admins } = require('./configuration'); // configuration =
 const { AdvertismentModel } = require("./DataBase/AdvertismentEntity");
 const { AdminModel } = require("./DataBase/AdminEntity");
 const e = require('express');
+const { ScreenModel } = require("./DataBase/ScreenEntity");
 
 /**
     Establish connection with the database using it's URL address.
@@ -26,7 +27,6 @@ async function setupDatabase() {
     
     insertAdvertismentData();
     insertAdminData();
-
 }
 
 /**
@@ -53,6 +53,24 @@ async function fetchAdvertismentByScreenId(screenId) {
     return AdvertismentModel.find({
         screenId: screenId
     });
+}
+
+/**
+ * Fetch advertisment data of all advertisment screenID.
+ * @returns Advertisment data.
+ */
+ async function fetchAllAdvertisment() {
+    // SELECT FROM Advertisment
+    return AdvertismentModel.find({});
+}
+
+/**
+ * Fetch screen data of all the screens.
+ * @returns Screens data sorted by last connection date and time.
+ */
+ async function fetchAllScreensData() {
+    // SELECT FROM screens
+    return ScreenModel.find({}).sort({lastConnection: -1});
 }
 
 /**
@@ -93,7 +111,6 @@ async function insertAdvertismentData() {
         console.log(`Insert new advertisment, ID=${tempAdvertisment._id}`);
         tempAdvertisment.save();
     });
-
 }
 
 /**
@@ -105,8 +122,7 @@ async function insertAdminData() {
         const tempAdmin = new AdminModel(element);
         console.log(`Insert new admin, ID=${tempAdmin._id}`);
         tempAdmin.save();
-    });
-       
+    });    
 }
 
 
@@ -153,5 +169,7 @@ module.exports = {
     setupDatabase,
     fetchAdvertismentByName,
     fetchAdvertismentByScreenId,
-    findIfAdminExists
+    findIfAdminExists,
+    fetchAllAdvertisment,
+    fetchAllScreensData
 };

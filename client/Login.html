@@ -7,32 +7,22 @@
 </head>
   <body style="text-align: center; margin: 0 auto">
     <h2>Administrator Login</h2>
-    <form action ="/createcontact" method="POST">
+    <form action ="/check-admin" method="POST">
       <div class="imgcontainer">
         <img src="./img/profile-user.png" alt="Avatar" class="avatar">
         </div>
-    <div class="container">
+    
     <p>Please fill your user name and password in order to login</p>
     <hr>
+    <div class="container">
     <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" id="username" required>
+    <input type="text" placeholder="Enter Username" name="uname" id="username" required/>
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
-    <input type="submit" class="loginbtn" onclick="returnData();">Login</button>
+    <input type="password" placeholder="Enter Password" name="psw" id="psw" required/>
+    <input type="submit" class="loginbtn" value="login"/>
 
     <!-- <div id="adminLogin"></div> -->
     
-    <button type="submit" class="loginbtn" onclick="returnData();">Login</button>
-    <script>
-     function returnData(){ 
-    var userName = document.getElementById("username").value;
-    var password = document.getElementById("psw").value;
-    console.log("here");
-    alert(password);
-    console.log(password)
-}
-    </script>
-
 </div>  
 </form>
 

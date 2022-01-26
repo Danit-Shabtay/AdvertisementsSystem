@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
-const { setupDatabase, fetchAdvertismentByScreenId, fetchAllAdvertisment, fetchAllScreensData } = require('./MongoUtils');
+const { setupDatabase, fetchAdvertismentByScreenId,findIfAdminExists, fetchAllAdvertisment, fetchAllScreensData } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 const urlEncodedParser = bodyParser.urlencoded({ extended: false })
@@ -42,10 +42,26 @@ server.get('/', (req, res) => {
 });
 
 
- server.get('/login', async (req, res) => {// Sending html page to the client
-     //const userName = req.query.userName;
-    // const password = req.query.password;
-    const trueOrFalse = await findIfAdminExists("admin","password");
+//  server.get('/login', async (req, res) => {// Sending html page to the client
+//      //const userName = req.query.userName;
+//     // const password = req.query.password;
+//     const trueOrFalse = await findIfAdminExists("admin","password");
+//     if(trueOrFalse.length==1){
+//         console.log("found");
+//         website = path.join(__dirname, "../client/Admin.html");
+//         return res.sendFile(website)
+//     } 
+//     else{
+//         console.log("not found");
+//         website = path.join(__dirname, "../client/index.html");
+//     return res.sendFile(website);
+//     }
+// });
+//right function validate if admin exists
+server.post('/check-admin',urlEncodedParser, async function(req,res){
+    const psw =  req.body.psw;
+    const userName = req.body.uname;
+    const trueOrFalse = await findIfAdminExists(userName,psw);
     if(trueOrFalse.length==1){
         console.log("found");
         website = path.join(__dirname, "../client/Admin.html");
@@ -54,14 +70,10 @@ server.get('/', (req, res) => {
     else{
         console.log("not found");
         website = path.join(__dirname, "../client/index.html");
-    return res.sendFile(website);
+        return res.sendFile(website);
     }
-});
-server.post('/createcontact',urlEncodedParser, async function(req,res){
-    console.log(req.body);
-    const userName =  (req.query.username);
-    console.log(userName + " vfd");
- 
+
+     
   });
 
 

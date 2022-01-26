@@ -6,7 +6,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 .container {
-  text-align: center;
+  text-align: left;
   margin: 0 auto;
 }
 
@@ -22,7 +22,7 @@ input[type="password"] {
 }
 
 /* Set a style for all buttons */
-button {
+.loginbtn {
   background-color: #04aa6d;
   color: white;
   padding: 14px 20px;
@@ -43,7 +43,6 @@ button:hover {
   display: block;
   margin: 0 auto;
   padding-top: 10px;
-
   width: 50%;
 }
 

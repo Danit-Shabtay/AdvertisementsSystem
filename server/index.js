@@ -36,7 +36,7 @@ server.get('/login', async (req, res) => {// Sending html page to the client
         if(trueOrFalse.length==1){
             console.log("found");
             return res.sendFile(website)
-        }
+        } 
         else{
             console.log("not found");
         return res.sendFile(website);

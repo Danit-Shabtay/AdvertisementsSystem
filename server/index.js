@@ -32,6 +32,23 @@ server.get('/', (req, res) => {
     return res.sendFile(website);
 });
 
+
+server.get('/login', async (req, res) => {// Sending html page to the client
+    // const userName = req.query.userName;
+    // const password = req.query.password;
+    const trueOrFalse = await findIfAdminExists("admin","password");
+    if(trueOrFalse.length==1){
+        console.log("found");
+        return res.sendFile(website)
+    } 
+    else{
+        console.log("not found");
+    return res.sendFile(website);
+    }
+});
+
+
+
 /**
     Request example: /advertisment?id=1
 

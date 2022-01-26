@@ -1,9 +1,11 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
 const { setupDatabase, fetchAdvertismentByScreenId, fetchAllAdvertisment, fetchAllScreensData } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
+const urlEncodedParser = bodyParser.urlencoded({ extended: false })
 
 const print = (data) => { console.log(data) };
 
@@ -55,9 +57,9 @@ server.get('/', (req, res) => {
     return res.sendFile(website);
     }
 });
-server.post('/createcontact', async function(req,res){
-    console.log("New employee has been added");
-    const userName = await (req.query.username);
+server.post('/createcontact',urlEncodedParser, async function(req,res){
+    console.log(req.body);
+    const userName =  (req.query.username);
     console.log(userName + " vfd");
  
   });

@@ -124,10 +124,20 @@ async function insertAdminData() {
     });    
 }
 
+async function findIfAdminExists(adminName,password) {
+    // SELECT FROM Advertisment
+    // WHERE Name = advertismentName
+    return AdminModel.find({
+        username: adminName,
+        password: password
+    });
+}
+
 module.exports = {
     setupDatabase,
     fetchAdvertismentByName,
     fetchAdvertismentByScreenId,
     fetchAllAdvertisment,
-    fetchAllScreensData
+    fetchAllScreensData,
+    findIfAdminExists
 };

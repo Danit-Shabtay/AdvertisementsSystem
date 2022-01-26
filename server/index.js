@@ -28,25 +28,39 @@ server.get('/', (req, res) => {
     });
 
     // Sending html page to the client
-    const website = path.join(__dirname, "../client/index.html");
+    if (Number(req.query.id) == 0)
+    {
+        console.log(req.query.id)
+        website = path.join(__dirname, "../client/login.html");
+    }
+    else{
+        website = path.join(__dirname, "../client/index.html");
+    }
     return res.sendFile(website);
 });
 
 
-server.get('/login', async (req, res) => {// Sending html page to the client
-    // const userName = req.query.userName;
+ server.get('/login', async (req, res) => {// Sending html page to the client
+     //const userName = req.query.userName;
     // const password = req.query.password;
     const trueOrFalse = await findIfAdminExists("admin","password");
     if(trueOrFalse.length==1){
         console.log("found");
+        website = path.join(__dirname, "../client/Admin.html");
         return res.sendFile(website)
     } 
     else{
         console.log("not found");
+        website = path.join(__dirname, "../client/index.html");
     return res.sendFile(website);
     }
 });
-
+server.post('/createcontact', async function(req,res){
+    console.log("New employee has been added");
+    const userName = await (req.query.username);
+    console.log(userName + " vfd");
+ 
+  });
 
 
 /**

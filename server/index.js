@@ -25,7 +25,7 @@ server.get('/', (req, res) => {
 
     ScreenModel.find({_id: screenId},function(err,result){
 
-        if(result.length==0){//if this screen id is not in the database
+        if(result.length==0 && screenId!=0){//If this screen id is not already in the database and the id isn't admin-"0"
             var screen = new ScreenModel({ _id: screenId, lastConnection: null});
             screen.save();
         }
@@ -34,7 +34,6 @@ server.get('/', (req, res) => {
     // Sending html page to the client
     if (Number(req.query.id) == 0)
     {
-        console.log(req.query.id)
         website = path.join(__dirname, "../client/login.html");
     }
     else{

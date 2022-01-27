@@ -6,7 +6,9 @@ const { setupDatabase, fetchAdvertismentByScreenId,findIfAdminExists, fetchAllAd
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 const urlEncodedParser = bodyParser.urlencoded({ extended: false })
+// const fs = require('fs');
 
+// const {check, validationResult } = reqire('express-validator')
 const print = (data) => { console.log(data) };
 
 setupDatabase();
@@ -69,8 +71,13 @@ server.post('/check-admin',urlEncodedParser, async function(req,res){
     } 
     else{
         console.log("not found");
-        website = path.join(__dirname, "../client/index.html");
-        return res.sendFile(website);
+        const alert = "admin not found";
+        website = path.join(__dirname, "../client/login.html");
+        return res.sendFile(website)
+        res.render('login',{
+            alert
+        })
+
     }
 
      

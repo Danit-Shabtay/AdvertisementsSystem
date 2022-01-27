@@ -130,7 +130,7 @@ server.get('/screens', async (req, res) => {
     Define the public directory of the system.
     Client request example: /client/img/1.jpg/
  */
-server.use(express.static('../client'));
+    server.use(express.static(__dirname +'/../client'));
 
 /**
     Initiate the server to start listenting to client requests.

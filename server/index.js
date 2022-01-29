@@ -35,6 +35,8 @@ server.get('/', (req, res) => {
     if (Number(req.query.id) == 0)
     {
         website = path.join(__dirname, "../client/login.html");
+        //needs to sent back to the html page "please fill your details"
+        res.render(website,{alertM: "please fill all the data"})
     }
     else{
         website = path.join(__dirname, "../client/index.html");

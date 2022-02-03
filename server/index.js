@@ -10,19 +10,16 @@ const urlEncodedParser = bodyParser.urlencoded({ extended: false })
 
 // const {check, validationResult } = reqire('express-validator')
 const print = (data) => { console.log(data) };
-
 setupDatabase();
-
 const server = express();
-
+server.use(express.json())
+server.use(cors());
 /**
     Return the html page to the client.
 */
 server.get('/', (req, res) => {
-
     const screenId = Number(req.query.id);
     print(`New connection from screen ID=${screenId}`);
-
     ScreenModel.find({_id: screenId},function(err,result){
 
         if(result.length==0 && screenId!=0){//If this screen id is not already in the database and the id isn't admin-"0"
@@ -44,41 +41,17 @@ server.get('/', (req, res) => {
     return res.sendFile(website);
 });
 
-
-//  server.get('/login', async (req, res) => {// Sending html page to the client
-//      //const userName = req.query.userName;
-//     // const password = req.query.password;
-//     const trueOrFalse = await findIfAdminExists("admin","password");
-//     if(trueOrFalse.length==1){
-//         console.log("found");
-//         website = path.join(__dirname, "../client/Admin.html");
-//         return res.sendFile(website)
-//     } 
-//     else{
-//         console.log("not found");
-//         website = path.join(__dirname, "../client/index.html");
-//     return res.sendFile(website);
-//     }
-// });
-//right function validate if admin exists
 server.post('/check-admin',urlEncodedParser, async function(req,res){
     const psw =  req.body.psw;
     const userName = req.body.uname;
-    const trueOrFalse = await findIfAdminExists(userName,psw);
-    if(trueOrFalse.length==1){
+    const admins = await findIfAdminExists(userName,psw);
+    if(admins.length==1){
         console.log("found");
-        website = path.join(__dirname, "../client/Admin.html");
-        return res.sendFile(website)
+        return res.json({isAdmin:true})
     } 
     else{
         console.log("not found");
-        const alert = "admin not found";
-        website = path.join(__dirname, "../client/login.html");
-        return res.sendFile(website)
-        res.render('login',{
-            alert
-        })
-
+        return res.json({isAdmin:false})
     }
 
      

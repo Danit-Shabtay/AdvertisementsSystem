@@ -66,7 +66,7 @@ server.get('/advertisment', async (req, res) => {
 
     if(screenId!=0){//if the request is from regular client
         var date = new Date();
-        var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+        var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,-1);
 
         await ScreenModel.updateOne({ _id: screenId }, { $set: { lastConnection: isoDateTime } });
 

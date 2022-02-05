@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ScreenSchema = new mongoose.Schema({
     _id: Number,
-    lastConnection: Date
+    lastConnection: String
 });
 
 // Create model from the schema

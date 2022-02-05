@@ -1,22 +1,18 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
 const { setupDatabase, fetchAdvertismentByScreenId,findIfAdminExists, fetchAllAdvertisment, fetchAllScreensData } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 const urlEncodedParser = bodyParser.urlencoded({ extended: false })
-// const fs = require('fs');
-
-// const {check, validationResult } = reqire('express-validator')
 const print = (data) => { console.log(data) };
 setupDatabase();
 const server = express();
 server.use(express.json())
 server.use(cors());
-/**
-    Return the html page to the client.
-*/
+
 server.get('/', (req, res) => {
     const screenId = Number(req.query.id);
     print(`New connection from screen ID=${screenId}`);
@@ -32,31 +28,28 @@ server.get('/', (req, res) => {
     if (Number(req.query.id) == 0)
     {
         website = path.join(__dirname, "../client/login.html");
-        //needs to sent back to the html page "please fill your details"
-        res.render(website,{alertM: "please fill all the data"})
     }
     else{
         website = path.join(__dirname, "../client/index.html");
     }
     return res.sendFile(website);
 });
-
 server.post('/check-admin',urlEncodedParser, async function(req,res){
     const psw =  req.body.psw;
     const userName = req.body.uname;
     const admins = await findIfAdminExists(userName,psw);
     if(admins.length==1){
-        console.log("found");
         return res.json({isAdmin:true})
     } 
     else{
-        console.log("not found");
         return res.json({isAdmin:false})
     }
-
-     
   });
 
+  server.get('/admin', (req, res) => {
+    website = path.join(__dirname, "../client/Admin.html");
+    return res.sendFile(website);
+});
 
 /**
     Request example: /advertisment?id=1

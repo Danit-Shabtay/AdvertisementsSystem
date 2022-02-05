@@ -9,20 +9,49 @@
 </head>
   <body style="text-align: center; margin: 0 auto">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <h2>Administrator Login</h2>
+    
+<script>
+  window.onload = () => {
+    document.querySelector("form").addEventListener("submit",formLoginSubmit)
+    $('#alertId').append("Please fill your user name and password in order to login");
+  }
+    async function formLoginSubmit(e){
+        e.preventDefault();
+        let psw = document.getElementById("psw").value;
+        let uname = document.getElementById("username").value;
+        let body = {psw,uname};
+        try {
+          let f = await fetch("http://localhost:3000/check-admin",{
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            method:"POST",
+            body:JSON.stringify(body)
+          });
+          let j = await f.json();
+          if(j.isAdmin){
+            window.location.href = "http://localhost:3000/admin"
+          }else{
+             document.getElementById("alertId").innerHTML = "Wrong User name/Password";
+          }
+        } catch (error) {
+        }
+    }
+  </script>
+    <h1>Administrator Login</h1>
     <div class="alert alert-warning alert-dismissible fade show" id = "alertId" role="alert">
       <strong></strong> 
       <!-- puts the data here  -->
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <script>
-    </script>
+
     <form action ="/check-admin" method="POST">
       <div class="imgcontainer">
         <img src="./img/profile-user.png" alt="Avatar" class="avatar">
         </div>
     
-    <p>Please fill your user name and password in order to login</p>
+    <!-- <p>Please fill your user name and password in order to login</p> -->
     <hr>
     <div class="container">
     <label for="uname"><b>Username</b></label>

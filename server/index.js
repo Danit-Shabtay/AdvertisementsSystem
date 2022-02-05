@@ -62,7 +62,6 @@ server.get('/advertisment', async (req, res) => {
     const screenId = Number(req.query.id);
     print(`Receive request from screen ID=${screenId} for advertisment data`);
     var screenAdvertisment;
-    res.header("Access-Control-Allow-Origin", "*");
 
     if(screenId!=0){//if the request is from regular client
         var date = new Date();
@@ -88,7 +87,6 @@ server.get('/advertisment', async (req, res) => {
 server.get('/screens', async (req, res) => {
 
     print(`Receive request for screens data`);
-    res.header("Access-Control-Allow-Origin", "*");
     
     const screens = await fetchAllScreensData();
     return res.json(screens);

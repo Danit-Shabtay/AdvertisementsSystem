@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const ScreenSchema = new mongoose.Schema({
     _id: Number,
-    lastConnection: String
+    lastConnection: String,
+    isOnline: Boolean
 });
 
 // Create model from the schema

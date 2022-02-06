@@ -33,6 +33,7 @@ fetch('http://'+SERVER+"/screens")
       content += '<td>' + data[i]._id + '</td>';
       const date=new Date(data[i].lastConnection);
       content += '<td>' + date.toLocaleDateString()+" "+date.toLocaleTimeString()+ '</td>';
+      content += '<td>' + data[i].isOnline+ '</td>';
       content += '</tr>';
     }
     //Inserting rows into table 

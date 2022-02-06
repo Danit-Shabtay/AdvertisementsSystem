@@ -15,19 +15,23 @@ server.use(cors());
 
 server.get('/connect', function(req, res) {
     const screenId = Number(req.query.id);
-    req.on("close", function() {//When a screen client will leave the server web
+    req.on("close", async function() {//When a screen client will leave the server web
         console.log(`Screen NO."${screenId}" has closed the connection with the server`);
+        await ScreenModel.updateOne({ _id: screenId }, { $set: { isOnline: false } });
     });
   });
 
 server.get('/', (req, res) => {
     const screenId = Number(req.query.id);
     print(`New connection from screen ID=${screenId}`);
-    ScreenModel.find({_id: screenId},function(err,result){
+    ScreenModel.find({_id: screenId},async function(err,result){
 
         if(result.length==0 && screenId!=0){//If this screen id is not already in the database and the id isn't admin-"0"
-            var screen = new ScreenModel({ _id: screenId, lastConnection: null});
+            var screen = new ScreenModel({ _id: screenId, lastConnection: null, isOnline: true});
             screen.save();
+        }
+        else if(result.length!=0){//If this screen id is not already in the database
+            await ScreenModel.updateOne({ _id: screenId }, { $set: { isOnline: true } });
         }
     });
 

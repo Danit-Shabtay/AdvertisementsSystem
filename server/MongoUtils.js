@@ -73,31 +73,11 @@ async function fetchAdvertismentByScreenId(screenId) {
 }
 
 /**
- * TODO
- * @param {*} userDetails 
+ * Change the admin username and passsword
  */
-async function addUser(userDetails) {
-    /*
-    1. Create UserSchema
-    2. Create UserModel from UserSchema
-
-    3. Create object & fill it with data:
-    let userToAdd = new UserModel({
-    username: ....,
-    screenId: ...,
-    lastConnectionTimetamp: ....,
-    .....
-    })
-
-    4. save the new user to the DB:
-    userToAdd.save()
-    .then(doc => {
-        console.log(doc)
-    })
-    .catch(err => {
-        console.error(err)
-    })
-    */
+ async function changeTheAdminLoginDetails(newUsername,newPassword) {
+    await ScreenModel.updateOne({}, { $set: { username: newUsername } });
+    await ScreenModel.updateOne({}, { $set: { password: newPassword } });
 }
 
 /**
@@ -121,7 +101,7 @@ async function insertAdminData() {
         const tempAdmin = new AdminModel(element);
         console.log(`Insert new admin, ID=${tempAdmin._id}`);
         tempAdmin.save();
-    });    
+    });
 }
 
 async function findIfAdminExists(adminName,password) {
@@ -139,5 +119,6 @@ module.exports = {
     fetchAdvertismentByScreenId,
     fetchAllAdvertisment,
     fetchAllScreensData,
-    findIfAdminExists
+    findIfAdminExists,
+    changeTheAdminLoginDetails
 };

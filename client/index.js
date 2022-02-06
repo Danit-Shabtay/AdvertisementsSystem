@@ -67,6 +67,7 @@ function getIdFromParams(){
 
 function main() {
     const screenId = getIdFromParams();
+    window.location.assign('http://'+SERVER+"/connect?id="+ screenId); 
     showAdvertismentLoop(screenId);
 }
 

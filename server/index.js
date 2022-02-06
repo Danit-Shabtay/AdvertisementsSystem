@@ -13,6 +13,13 @@ const server = express();
 server.use(express.json())
 server.use(cors());
 
+server.get('/connect', function(req, res) {
+    const screenId = Number(req.query.id);
+    req.on("close", function() {//When a screen client will leave the server web
+        console.log(`Screen NO."${screenId}" has closed the connection with the server`);
+    });
+  });
+
 server.get('/', (req, res) => {
     const screenId = Number(req.query.id);
     print(`New connection from screen ID=${screenId}`);

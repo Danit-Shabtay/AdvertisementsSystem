@@ -1,7 +1,12 @@
 
 const SERVER="localhost:3000";
 $(document).ready(function () {
-fetch('http://'+SERVER+"/advertisment?id=0")
+  //'http://'+SERVER+"/advertisment?id=0"
+fetch('http://'+SERVER+"/adminAd?id=0",{
+  headers:{
+    'x-api-key':localStorage.getItem('Advertisment-token') || ''
+  }
+})
  .then(response =>response.json())
  .then(function(data){
   var content = '';

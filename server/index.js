@@ -9,9 +9,24 @@ const SCREEN_NUMBER = 3;
 const urlEncodedParser = bodyParser.urlencoded({ extended: false })
 const print = (data) => { console.log(data) };
 setupDatabase();
+const jwt = require('jsonwebtoken');
 const server = express();
 server.use(express.json())
 server.use(cors());
+
+
+
+//new token
+const checkToken = async (req,res,next)=>{
+    let token = req.header('x-api-key');
+    if(!token) return res.status(401).json({error:"you must send token"});
+    try {
+        let verify = await jwt.verify(token,'SECRET');
+        next();
+    } catch (error) {
+        return res.status(401).json({error:"something went wrong"});
+    } 
+}
 
 server.get('/connect', function(req, res) {
     const screenId = Number(req.query.id);
@@ -50,7 +65,8 @@ server.post('/check-admin',urlEncodedParser, async function(req,res){
     const userName = req.body.uname;
     const admins = await findIfAdminExists(userName,psw);
     if(admins.length==1){
-        return res.json({isAdmin:true})
+        let newToken = jwt.sign({_id:admins[0]._id},'SECRET',{expiresIn:"30d"});
+        return res.json({isAdmin:true,token:newToken})
     } 
     else{
         return res.json({isAdmin:false})
@@ -68,17 +84,17 @@ server.get('/changePassword', (req, res) => {
 });
 
 
-server.post('/check-admin',urlEncodedParser, async function(req,res){
-    const psw =  req.body.psw;
-    const psw2 = req.body.psw;
-    const admins = await findIfAdminExists(userName,psw);
-    if(admins.length==1){
-        return res.json({isAdmin:true})
-    } 
-    else{
-        return res.json({isAdmin:false})
-    }
-  });
+// server.post('/check-admin',urlEncodedParser, async function(req,res){
+//     const psw =  req.body.psw;
+//     const psw2 = req.body.psw;
+//     const admins = await findIfAdminExists(userName,psw);
+//     if(admins.length==1){
+//         return res.json({isAdmin:true})
+//     } 
+//     else{
+//         return res.json({isAdmin:false})
+//     }
+//   });
 
 /**
     Request example: /advertisment?id=1
@@ -86,12 +102,34 @@ server.post('/check-admin',urlEncodedParser, async function(req,res){
     Return the advertisment data to the screen.
     The query parameter: id, represent the screen ID.
 */
+//check token,
 server.get('/advertisment', async (req, res) => {
 
     const screenId = Number(req.query.id);
     print(`Receive request from screen ID=${screenId} for advertisment data`);
     var screenAdvertisment;
+    if(screenId!=0){//if the request is from regular client
+        var date = new Date();
+        var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,-1);
 
+        await ScreenModel.updateOne({ _id: screenId }, { $set: { lastConnection: isoDateTime } });
+
+        screenAdvertisment = await fetchAdvertismentByScreenId(screenId% SCREEN_NUMBER);
+    }
+    else{//if the request is from the admin client
+        screenAdvertisment = await fetchAllAdvertisment();
+    }
+    print(`send ${screenAdvertisment.length} advertisment to the screen ID=${screenId}`);
+
+    return res.json(screenAdvertisment);
+});
+
+
+server.get('/adminAd',checkToken, async (req, res) => {
+
+    const screenId = Number(req.query.id);
+    print(`Receive request from screen ID=${screenId} for advertisment data`);
+    var screenAdvertisment;
     if(screenId!=0){//if the request is from regular client
         var date = new Date();
         var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,-1);
@@ -109,8 +147,7 @@ server.get('/advertisment', async (req, res) => {
 });
 
 /**
-    Request example: /screens
-
+    Request example: /screens 
     Return the screens data.
 */
 server.get('/screens', async (req, res) => {

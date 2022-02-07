@@ -62,6 +62,24 @@ server.post('/check-admin',urlEncodedParser, async function(req,res){
     return res.sendFile(website);
 });
 
+server.get('/changePassword', (req, res) => {
+    website = path.join(__dirname, "../client/changePassword.html");
+    return res.sendFile(website);
+});
+
+
+server.post('/check-admin',urlEncodedParser, async function(req,res){
+    const psw =  req.body.psw;
+    const psw2 = req.body.psw;
+    const admins = await findIfAdminExists(userName,psw);
+    if(admins.length==1){
+        return res.json({isAdmin:true})
+    } 
+    else{
+        return res.json({isAdmin:false})
+    }
+  });
+
 /**
     Request example: /advertisment?id=1
 
@@ -102,6 +120,8 @@ server.get('/screens', async (req, res) => {
     const screens = await fetchAllScreensData();
     return res.json(screens);
 });
+
+
 
 /**
     Define the public directory of the system.

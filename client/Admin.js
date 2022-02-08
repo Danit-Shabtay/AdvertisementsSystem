@@ -28,7 +28,11 @@ fetch('http://'+SERVER+"/adminAd?id=0",{
   })
 })
 
-fetch('http://'+SERVER+"/screens")
+fetch('http://'+SERVER+"/screens",{
+  headers:{
+    'x-api-key':localStorage.getItem('Advertisment-token') || ''
+  }
+})
  .then(response =>response.json())
  .then(function(data){
   var content = '';

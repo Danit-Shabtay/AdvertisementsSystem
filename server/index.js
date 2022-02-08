@@ -150,7 +150,7 @@ server.get('/adminAd',checkToken, async (req, res) => {
     Request example: /screens 
     Return the screens data.
 */
-server.get('/screens', async (req, res) => {
+server.get('/screens', checkToken,async (req, res) => {
 
     print(`Receive request for screens data`);
     

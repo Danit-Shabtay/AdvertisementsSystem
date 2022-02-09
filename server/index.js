@@ -150,7 +150,6 @@ server.get('/screens', checkToken,async (req, res) => {
 //call function that update database , afterward check if the update was successful if it was get a new token
 server.post('/changePassword',urlEncodedParser, async function(req,res){
     const psw =  req.body.psw;
-    console.log(req.body.uname);
     const userName = req.body.uname;
     await changeTheAdminLoginDetails(userName,psw);
     const admins = await findIfAdminExists(userName,psw);

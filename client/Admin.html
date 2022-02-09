@@ -42,11 +42,15 @@
     <br>
     <h1>Replace Username And Password</h1>
     <br>
-    <label for="uname"><b>Username </b></label>
-    <input type="text" placeholder="Enter New Username" name="uname" required/>
-    <label for="psw"><b>Password </b></label>
-    <input type="password" placeholder="Enter New Password" name="psw" required/>
-    <input type="submit" value="Save & Update"/>
+    <div class="wrapper">
+    <button id="myButton" class="float-left submit-button" >Change user name or password</button>
+    </div>
+    <script type="text/javascript">
+        document.getElementById("myButton").onclick = function () {
+            location.href ="http://localhost:3000/changePassword";
+        };
+    </script>
+
 </body>
 
 </html>

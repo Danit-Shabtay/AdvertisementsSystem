@@ -1,6 +1,6 @@
 /* Bordered form */
 form {
-  border: 3px solid #f1f1f1;
+  border: 3px solid #fff;
 }
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -94,7 +94,21 @@ h1 {
   font-family: "Gill Sans", "Gill Sans MT", " Calibri", "Trebuchet MS",
     "sans-serif";
 }
+#myButton{
+  background-color: #006600;
+  color: white;
+  padding: 14px 20px;
+  /* margin: 8px 0; */
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  width: 25%;
+  }
 
+  .wrapper {
+    text-align: center;
+
+}
 td {
   background-color: #e4f5d4;
   border: 1px solid black;
@@ -137,6 +151,7 @@ flex-direction: column;
 .formTitle{
 font-weight: 600;
 margin-top: 20px;
+margin-bottom: 30px;
 color: #2F2D3B;
 text-align: center;
 }

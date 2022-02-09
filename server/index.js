@@ -147,7 +147,7 @@ server.get('/screens', checkToken,async (req, res) => {
     return res.json(screens);
 });
 
-//change admin data
+//call function that update database , afterward check if the update was successful if it was get a new token
 server.post('/changePassword',urlEncodedParser, async function(req,res){
     const psw =  req.body.psw;
     console.log(req.body.uname);

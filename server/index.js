@@ -3,7 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
-const { setupDatabase, fetchAdvertismentByScreenId,findIfAdminExists, fetchAllAdvertisment, fetchAllScreensData } = require('./MongoUtils');
+const { setupDatabase, fetchAdvertismentByScreenId,findIfAdminExists, fetchAllAdvertisment, fetchAllScreensData, changeTheAdminLoginDetails } = require('./MongoUtils');
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 const urlEncodedParser = bodyParser.urlencoded({ extended: false })
@@ -84,17 +84,6 @@ server.get('/changePassword', (req, res) => {
 });
 
 
-// server.post('/check-admin',urlEncodedParser, async function(req,res){
-//     const psw =  req.body.psw;
-//     const psw2 = req.body.psw;
-//     const admins = await findIfAdminExists(userName,psw);
-//     if(admins.length==1){
-//         return res.json({isAdmin:true})
-//     } 
-//     else{
-//         return res.json({isAdmin:false})
-//     }
-//   });
 
 /**
     Request example: /advertisment?id=1
@@ -158,6 +147,32 @@ server.get('/screens', checkToken,async (req, res) => {
     return res.json(screens);
 });
 
+//change admin data
+server.post('/changePassword',urlEncodedParser, async function(req,res){
+    const psw =  req.body.psw;
+    console.log(req.body.uname);
+    const userName = req.body.uname;
+    await changeTheAdminLoginDetails(userName,psw);
+    const admins = await findIfAdminExists(userName,psw);
+    if(admins.length==1){
+        let newToken = jwt.sign({_id:admins[0]._id},'SECRET',{expiresIn:"30d"});
+        return res.json({isAdmin:true,token:newToken})
+    } 
+    else{
+        return res.json({isAdmin:false})
+    }
+
+  });
+
+  server.get('/admin', (req, res) => {
+    website = path.join(__dirname, "../client/Admin.html");
+    return res.sendFile(website);
+});
+
+server.get('/changePassword', (req, res) => {
+    website = path.join(__dirname, "../client/changePassword.html");
+    return res.sendFile(website);
+});
 
 
 /**

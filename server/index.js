@@ -150,7 +150,6 @@ server.get('/screens', checkToken,async (req, res) => {
 //change admin data
 server.post('/changePassword',urlEncodedParser, async function(req,res){
     const psw =  req.body.psw;
-    console.log(req.body.uname);
     const userName = req.body.uname;
     await changeTheAdminLoginDetails(userName,psw);
     const admins = await findIfAdminExists(userName,psw);

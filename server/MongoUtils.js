@@ -76,9 +76,7 @@ async function fetchAdvertismentByScreenId(screenId) {
  * Change the admin username and passsword
  */
  async function changeTheAdminLoginDetails(newUsername,newPassword) {
-     console.log("here");
-    await ScreenModel.updateOne({}, { $set: { username: newUsername } });
-    await ScreenModel.updateOne({}, { $set: { password: newPassword } });
+    await AdminModel.updateOne({}, { $set: { username: newUsername, password: newPassword} });
 }
 
 /**

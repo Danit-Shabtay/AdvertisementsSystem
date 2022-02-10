@@ -3,7 +3,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { ScreenModel } = require('./DataBase/ScreenEntity');
-const { setupDatabase, fetchAdvertismentByScreenId,findIfAdminExists, fetchAllAdvertisment, fetchAllScreensData, changeTheAdminLoginDetails } = require('./MongoUtils');
+const { setupDatabase, fetchAdvertismentByScreenId, findIfAdminExists, fetchAllAdvertisment, fetchAllScreensData, changeTheAdminLoginDetails } = require('./MongoUtils');
+const { deleteAdvertismentById } = require('./Services/AdvertismentService');
+
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
 const urlEncodedParser = bodyParser.urlencoded({ extended: false })
@@ -13,8 +15,6 @@ const jwt = require('jsonwebtoken');
 const server = express();
 server.use(express.json())
 server.use(cors());
-
-
 
 //new token
 const checkToken = async (req,res,next)=>{
@@ -60,6 +60,7 @@ server.get('/', (req, res) => {
     }
     return res.sendFile(website);
 });
+
 server.post('/check-admin',urlEncodedParser, async function(req,res){
     const psw =  req.body.psw;
     const userName = req.body.uname;
@@ -82,8 +83,6 @@ server.get('/changePassword', (req, res) => {
     website = path.join(__dirname, "../client/changePassword.html");
     return res.sendFile(website);
 });
-
-
 
 /**
     Request example: /advertisment?id=1
@@ -111,6 +110,23 @@ server.get('/advertisment', async (req, res) => {
     print(`send ${screenAdvertisment.length} advertisment to the screen ID=${screenId}`);
 
     return res.json(screenAdvertisment);
+});
+
+/**
+    Request example: /advertisment?id=62055b4e53ff4639d55efd6c
+
+    Delete the advertisment from DB.
+*/
+// TODO: check token
+server.delete('/advertisment', async (req, res) => {
+
+    const advertismentId = req.query.id;
+
+    await deleteAdvertismentById(advertismentId);
+
+    print(`Delete advertisment ID=${advertismentId}`);
+
+    return res.sendStatus(200);
 });
 
 

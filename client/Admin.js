@@ -1,5 +1,28 @@
+const SERVER = "localhost:3000";
 
-const SERVER="localhost:3000";
+function deleteAdvertismentHandler(event) {
+  const advertismentId = event.currentTarget.id;
+
+  deleteAdvertismentFromDb(advertismentId)
+    .then(deleteAdvertismentFromTable(advertismentId));
+}
+
+async function deleteAdvertismentFromDb(advertismentId) {
+  const serverApi = 'http://' + SERVER + "/advertisment?id=" + advertismentId;
+
+  return fetch(serverApi,
+    {
+      method: 'DELETE',
+      headers: {
+        'x-api-key': localStorage.getItem('Advertisment-token') || ''
+      }
+    });
+}
+
+async function deleteAdvertismentFromTable(advertismentId) {
+  $('#' + advertismentId).remove();
+}
+
 $(document).ready(function () {
   //'http://'+SERVER+"/advertisment?id=0"
 fetch('http://'+SERVER+"/adminAd?id=0",{
@@ -12,8 +35,8 @@ fetch('http://'+SERVER+"/adminAd?id=0",{
   var content = '';
     for(var i=0;i<data.length;i++){
       //Construction of rows having data from json object
-      content += '<tr>';
-      content+='<td><a href="https://google.com">'+data[i].name+'</a></td>'
+      content += '<tr id=' + data[i]._id + '>';
+      content += '<td>' + data[i].name + '</a></td>'
       content += '<td>' + data[i].screenId + '</td>'; 
       content += '<td>' + data[i].template + '</td>'; 
       content += '<td>' + data[i].length + '</td>';
@@ -23,8 +46,15 @@ fetch('http://'+SERVER+"/adminAd?id=0",{
       content += '<td>' + new Date(data[i].timeFrame[0].time.end).toLocaleTimeString() + '</td>'; 
       content += '</tr>';
     }
-    //Inserting rows into table 
-    $('#adsTable').append(content);
+    
+   // Inserting rows into table
+   $('#adsTable').append(content);
+
+   // Add onclick event to each table row:
+   // TODO: Replace with another handler: open edit/delete screen
+   for (var i = 0; i < data.length; i++) {
+      $('#' + data[i]._id).on("click", deleteAdvertismentHandler);
+   }
   })
 })
 

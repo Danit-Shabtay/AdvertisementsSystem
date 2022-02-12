@@ -143,6 +143,9 @@ $(document).ready(function () {
         content += '<td contenteditable="false" adv-property="date-end">' + new Date(data[i].timeFrame[0].dates.end).toLocaleDateString() + '</td>';
         content += '<td contenteditable="false" adv-property="time-start">' + new Date(data[i].timeFrame[0].time.start).toLocaleTimeString() + '</td>';
         content += '<td contenteditable="false" adv-property="time-end">' + new Date(data[i].timeFrame[0].time.end).toLocaleTimeString() + '</td>';
+        content += '<td contenteditable="false" adv-property="days">' + data[i].timeFrame[0].days + '</td>';
+        content += '<td contenteditable="false" adv-property="text">' + data[i].text + '</td>';
+        content += '<td contenteditable="false" adv-property="photo-name">' + data[i].images + '</td>';
         content += '</tr>';
       }
     

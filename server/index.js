@@ -28,6 +28,10 @@ const checkToken = async (req,res,next)=>{
     } 
 }
 
+server.get('/token',checkToken,function(req,res){
+    res.json({token:true})
+})
+
 server.get('/connect', function(req, res) {
     const screenId = Number(req.query.id);
     req.on("close", async function() {//When a screen client will leave the server web
@@ -67,7 +71,7 @@ server.post('/check-admin',urlEncodedParser, async function(req,res){
     const admins = await findIfAdminExists(userName,psw);
     if(admins.length==1){
         let newToken = jwt.sign({_id:admins[0]._id},'SECRET',{expiresIn:"30d"});
-        return res.json({isAdmin:true,token:newToken})
+        return res.json({isAdmin:true,token:newToken,userName:userName})
     } 
     else{
         return res.json({isAdmin:false})
@@ -164,14 +168,14 @@ server.get('/screens', checkToken,async (req, res) => {
 });
 
 //call function that update database , afterward check if the update was successful if it was get a new token
-server.post('/changePassword',urlEncodedParser, async function(req,res){
+server.post('/changePassword',checkToken,urlEncodedParser, async function(req,res){
     const psw =  req.body.psw;
     const userName = req.body.uname;
     await changeTheAdminLoginDetails(userName,psw);
     const admins = await findIfAdminExists(userName,psw);
     if(admins.length==1){
         let newToken = jwt.sign({_id:admins[0]._id},'SECRET',{expiresIn:"30d"});
-        return res.json({isAdmin:true,token:newToken})
+        return res.json({isAdmin:true,token:newToken,userName:userName})
     } 
     else{
         return res.json({isAdmin:false})

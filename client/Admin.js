@@ -4,8 +4,8 @@ const BTN_DELETE_ID_PREFIX = "btn_delete_";
 const TR_ID_PREFIX = "tr_";
 
 // Global state variables:
-let advState = false;
-let advertismentData = [];
+let advEditGlobalState = false;
+let advertismentGlobalData = [];
 
 function deleteAdvertismentHandler(event) {
   const deleteButtonId = event.currentTarget.id;
@@ -33,8 +33,8 @@ async function deleteAdvertismentFromTable(advertismentId) {
 }
 
 function deleteAdverismentFromGlobalData(advertismentId) {
-  const advertismentIndex = advertismentData.map(adv => adv._id).indexOf(advertismentId);
-  advertismentData.splice(advertismentIndex, 1);
+  const advertismentIndex = advertismentGlobalData.map(adv => adv._id).indexOf(advertismentId);
+  advertismentGlobalData.splice(advertismentIndex, 1);
 }
 
 async function editRow(event) {
@@ -43,26 +43,26 @@ async function editRow(event) {
   const advertismentTrId = TR_ID_PREFIX + advertismentId;
 
   // Enter edit row state:
-  if (!advState){
-    changeBtnImg(editButtonId, '/resources/save_btn.png');
+  if (!advEditGlobalState) {
+    changeBtnImg(editButtonId, "/resources/save_btn.png");
     changeRowContentEditableState(advertismentTrId, true);
 
-    advState = true;
+    advEditGlobalState = true;
   }
   // Exit edit row state:
   else {
-    changeBtnImg(editButtonId, '/resources/edit_btn.png');
+    changeBtnImg(editButtonId, "/resources/edit_btn.png");
     changeRowContentEditableState(advertismentTrId, false);
 
-    const allRowData = readRowData(advertismentTrId);  
-    const originalAdvData = advertismentData.filter(adv => adv._id == advertismentId)[0];
+    const allRowData = readRowData(advertismentTrId);
+    const originalAdvData = advertismentGlobalData.filter((adv) => adv._id == advertismentId)[0];
 
     const advertismentDataToUpdate = getDataDiff(allRowData, originalAdvData);
     if (jQuery.isEmptyObject(advertismentDataToUpdate)) {
       // Nothing to update
       return;
     }
-    
+
     await updateAdvertismentRequest(advertismentId, advertismentDataToUpdate).then(
       updateAdvertismentDataInGlobalState(
         advertismentId,
@@ -70,17 +70,17 @@ async function editRow(event) {
       )
     );
 
-    advState = false;
+    advEditGlobalState = false;
   }
 }
 
 function updateAdvertismentDataInGlobalState(advertismentId, advertismentDataToUpdate) {
-  const advertismentIndex = advertismentData
+  const advertismentIndex = advertismentGlobalData
     .map((adv) => adv._id)
     .indexOf(advertismentId);
 
   for (const [updateKey, updateValue] of Object.entries(advertismentDataToUpdate)) {
-    advertismentData[advertismentIndex][updateKey] = updateValue;
+    advertismentGlobalData[advertismentIndex][updateKey] = updateValue;
   }
   console.log(`Update page global state: ID=${advertismentId} values:${JSON.stringify(advertismentDataToUpdate)}`);
 }
@@ -196,7 +196,7 @@ $(document).ready(function () {
       }
 
       // Save advertisment for latter:
-      advertismentData = [...data];
+      advertismentGlobalData = [...data];
     });
 })
 

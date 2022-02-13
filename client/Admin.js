@@ -1,11 +1,82 @@
 const SERVER = "localhost:3000";
+const BTN_ADD_ID_NAME = "btn_add";
 const BTN_EDIT_ID_PREFIX = "btn_edit_";
 const BTN_DELETE_ID_PREFIX = "btn_delete_";
 const TR_ID_PREFIX = "tr_";
+const TR_NEW_ID = TR_ID_PREFIX + "new";
+const INVALID_TD_INDEX = -1;
 
 // Global state variables:
 let advEditGlobalState = false;
 let advertismentGlobalData = [];
+let advAddGlobalState = false;
+//let newAdvTrIndex = INVALID_TD_INDEX;
+
+async function addAdvertismentHandler() {
+  console.log("Add pressed!");
+
+  // Enter add row state:
+  if (!advAddGlobalState) {
+    changeBtnImg(BTN_ADD_ID_NAME, "/resources/save_btn.png");
+    insertNewEmptyRow();
+    changeRowContentEditableState(TR_NEW_ID, true);
+
+    advAddGlobalState = true;
+  }
+  // Exit add row state:
+  else {
+    changeBtnImg(BTN_ADD_ID_NAME, "/resources/add_btn.png");
+    changeRowContentEditableState(TR_NEW_ID, false);
+
+    const allRowData = readRowData(TR_NEW_ID);
+
+    await addAdvertismentRequest(allRowData)
+      .then(res => res.json())
+      .then(data => console.log(`new ID=${data["id"]}`));
+
+    // Call server API request to add new adv
+
+    // Update table row:
+    //  Add controllers
+    //  Update IDs
+    
+    // Add new adv to global state
+
+    advAddGlobalState = false;
+  }
+}
+
+/**
+  Insert new row to the table with tr id=TR_NEW_ID.
+*/
+function insertNewEmptyRow() {
+  let content = "";
+  content += '<tr id="' + TR_NEW_ID + '">';
+  content += '<td contenteditable="false">';
+  //content += '<button id="' + BTN_DELETE_ID_PREFIX + '" adv-id="' +  '"> <img src="/resources/delete_btn.png" /></button>';
+  //content += '<button id="' + BTN_EDIT_ID_PREFIX + '" adv-id="' +  '"> <img src="/resources/edit_btn.png" /></button>';
+  content += '</td >';
+  content += '<td contenteditable="false" adv-property="name">' + '</td>';
+  content += '<td contenteditable="false" adv-property="screenId">' + '</td>';
+  content += '<td contenteditable="false" adv-property="template">' + '</td>';
+  content += '<td contenteditable="false" adv-property="length">' + '</td>';
+  content += '<td contenteditable="false" adv-property="date-start">' + '</td>';
+  content += '<td contenteditable="false" adv-property="date-end">' + '</td>';
+  content += '<td contenteditable="false" adv-property="time-start">' + '</td>';
+  content += '<td contenteditable="false" adv-property="time-end">' + '</td>';
+  content += '<td contenteditable="false" adv-property="days">' + '</td>';
+  content += '<td contenteditable="false" adv-property="text">' + '</td>';
+  content += '<td contenteditable="false" adv-property="photo-name">' + '</td>';
+  content += '</tr>';
+  
+  $("#adsTable").append(content);
+}
+
+/*
+function addControllersToTr(trId) {
+  $("#" + trId).
+}
+*/
 
 function deleteAdvertismentHandler(event) {
   const deleteButtonId = event.currentTarget.id;
@@ -54,7 +125,8 @@ async function editRow(event) {
     changeBtnImg(editButtonId, "/resources/edit_btn.png");
     changeRowContentEditableState(advertismentTrId, false);
 
-    const allRowData = readRowData(advertismentTrId);
+    let allRowData = readRowData(advertismentTrId);
+    allRowData["_id"] = getIdFromTd(advertismentTrId);
     const originalAdvData = advertismentGlobalData.filter((adv) => adv._id == advertismentId)[0];
 
     const advertismentDataToUpdate = getDataDiff(allRowData, originalAdvData);
@@ -95,7 +167,22 @@ async function updateAdvertismentRequest(advertismentId, advertismentData) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      advertismentData: advertismentData,
+      advertismentData,
+    }),
+  });
+}
+
+async function addAdvertismentRequest(advertismentData) {
+  const serverApi = "http://" + SERVER + "/advertisment";
+
+  return fetch(serverApi, {
+    method: "POST",
+    headers: {
+      "x-api-key": localStorage.getItem("Advertisment-token") || "",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      advertismentData,
     }),
   });
 }
@@ -133,10 +220,17 @@ function changeRowContentEditableState(trId, state) {
   });                  
 }
 
+function getIdFromTd(trId) {
+  return $("#" + trId).attr("adv-id");
+}
+
+function setIdToTd(originalTrId, newIdValue) {
+  $("#" + originalTrId).attr("adv-id", newIdValue);
+}
+
 function readRowData(trId) {
 
   let data = {};
-  data["_id"] = $('#' + trId).attr('adv-id');
 
   $('#' + trId).each ((trIndex, tr) => {
     $(tr).children('td').each((tdIndex, td) => {
@@ -152,6 +246,46 @@ function readRowData(trId) {
   }); 
 
   return data;
+}
+
+function getDateStart(arr, index) {
+  try {
+    return new Date(arr[index].timeFrame[0].dates.start).toLocaleDateString();
+  } catch (error) {
+    return "";
+  }
+}
+
+function getDateEnd(arr, index) {
+  try {
+    return new Date(arr[index].timeFrame[0].dates.end).toLocaleDateString();
+  } catch (error) {
+    return "";
+  }
+}
+
+function getTimeStart(arr, index) {
+  try {
+    return new Date(arr[index].timeFrame[0].time.start).toLocaleDateString();
+  } catch (error) {
+    return "";
+  }
+}
+
+function getTimeEnd(arr, index) {
+  try {
+    return new Date(arr[index].timeFrame[0].time.end).toLocaleDateString();
+  } catch (error) {
+    return "";
+  }
+}
+
+function getTimeFrameDays(arr, index) {
+  try {
+    return arr[index].timeFrame[0].days;
+  } catch (error) {
+    return "";
+  }
 }
 
 $(document).ready(function () {
@@ -176,24 +310,27 @@ $(document).ready(function () {
         content += '<td contenteditable="false" adv-property="screenId">' + data[i].screenId + '</td>';
         content += '<td contenteditable="false" adv-property="template">' + data[i].template + '</td>';
         content += '<td contenteditable="false" adv-property="length">' + data[i].length + '</td>';
-        content += '<td contenteditable="false" adv-property="date-start">' + new Date(data[i].timeFrame[0].dates.start).toLocaleDateString() + '</td>';
-        content += '<td contenteditable="false" adv-property="date-end">' + new Date(data[i].timeFrame[0].dates.end).toLocaleDateString() + '</td>';
-        content += '<td contenteditable="false" adv-property="time-start">' + new Date(data[i].timeFrame[0].time.start).toLocaleTimeString() + '</td>';
-        content += '<td contenteditable="false" adv-property="time-end">' + new Date(data[i].timeFrame[0].time.end).toLocaleTimeString() + '</td>';
-        content += '<td contenteditable="false" adv-property="days">' + data[i].timeFrame[0].days + '</td>';
+        content += '<td contenteditable="false" adv-property="date-start">' + getDateStart(data, i) + '</td>';
+        content += '<td contenteditable="false" adv-property="date-end">' + getDateEnd(data, i) + '</td>';
+        content += '<td contenteditable="false" adv-property="time-start">' + getTimeStart(data, i) + '</td>';
+        content += '<td contenteditable="false" adv-property="time-end">' + getTimeStart(data, i) + '</td>';
+        content += '<td contenteditable="false" adv-property="days">' + getTimeFrameDays(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="text">' + data[i].text + '</td>';
-        content += '<td contenteditable="false" adv-property="photo-name">' + data[i].images + '</td>';
+        content += '<td contenteditable="false" adv-property="images">' + data[i].images + '</td>';
         content += '</tr>';
       }
     
       // Inserting rows into table
       $('#adsTable').append(content);
 
-      // Add events:
+      // Add events to table buttons:
       for (var i = 0; i < data.length; i++) {
         $('#' + BTN_EDIT_ID_PREFIX + data[i]._id).on("click", editRow);
         $('#' + BTN_DELETE_ID_PREFIX + data[i]._id).on("click", deleteAdvertismentHandler);
       }
+
+      // Add event to add button:
+      $('#' + BTN_ADD_ID_NAME).on("click", addAdvertismentHandler);
 
       // Save advertisment for latter:
       advertismentGlobalData = [...data];

@@ -179,7 +179,11 @@ server.put("/advertisment", async (req, res) => {
 
   await updateAdvertismentById(advertismentId, advertismentDataToUpdate);
 
-  print(`Update advertisment ID=${advertismentId}`);
+  print(
+    `Update advertisment ID=${advertismentId} with data:${JSON.stringify(
+      advertismentDataToUpdate
+    )}`
+  );
 
   return res.sendStatus(200);
 });

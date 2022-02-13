@@ -14,7 +14,7 @@ async function deleteAdvertismentById(advertismentId) {
 }
 
 /**
- * Update advertisment.
+ * Update existing advertisment.
  * @param {string} advertismentId 
  * @param {object} updateAdvertismentData 
  * @returns 
@@ -25,7 +25,18 @@ async function updateAdvertismentById(advertismentId, updateAdvertismentData) {
   return AdvertismentModel.findOneAndUpdate(idFilter, updateAdvertismentData);
 }
 
+/**
+ * Add new advertisment.
+ * @param {object} advertismentData 
+ * @returns 
+ */
+async function addAdvertisment(advertismentData) {
+  const tempAdvertisment = new AdvertismentModel(advertismentData);
+  return tempAdvertisment.save();
+}
+
 module.exports = {
   deleteAdvertismentById,
   updateAdvertismentById,
+  addAdvertisment,
 };

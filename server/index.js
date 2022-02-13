@@ -14,6 +14,7 @@ const {
 const {
   deleteAdvertismentById,
   updateAdvertismentById,
+  addAdvertisment,
 } = require("./Services/AdvertismentService");
 
 const PORT = 3000;
@@ -183,6 +184,24 @@ server.put("/advertisment", async (req, res) => {
     `Update advertisment ID=${advertismentId} with data:${JSON.stringify(
       advertismentDataToUpdate
     )}`
+  );
+
+  return res.sendStatus(200);
+});
+
+/**
+    Request example: /advertisment
+
+    Add new advertisment to the system.
+*/
+// TODO: check token
+server.post("/advertisment", async (req, res) => {
+  const advertismentDataToAdd = req.body.advertismentData;
+
+  await addAdvertisment(advertismentDataToAdd);
+
+  print(
+    `Add new advertisment with data: ${JSON.stringify(advertismentDataToAdd)}`
   );
 
   return res.sendStatus(200);

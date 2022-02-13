@@ -11,7 +11,10 @@ const {
   fetchAllScreensData,
   changeTheAdminLoginDetails,
 } = require("./MongoUtils");
-const { deleteAdvertismentById } = require("./Services/AdvertismentService");
+const {
+  deleteAdvertismentById,
+  updateAdvertismentById,
+} = require("./Services/AdvertismentService");
 
 const PORT = 3000;
 const SCREEN_NUMBER = 3;
@@ -160,6 +163,23 @@ server.delete("/advertisment", async (req, res) => {
   await deleteAdvertismentById(advertismentId);
 
   print(`Delete advertisment ID=${advertismentId}`);
+
+  return res.sendStatus(200);
+});
+
+/**
+    Request example: /advertisment?id=62055b4e53ff4639d55efd6c
+
+    Update the advertisment in DB.
+*/
+// TODO: check token
+server.put("/advertisment", async (req, res) => {
+  const advertismentId = req.query.id;
+  const advertismentDataToUpdate = req.body.advertismentData;
+
+  await updateAdvertismentById(advertismentId, advertismentDataToUpdate);
+
+  print(`Update advertisment ID=${advertismentId}`);
 
   return res.sendStatus(200);
 });

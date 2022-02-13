@@ -37,7 +37,7 @@ function deleteAdverismentFromGlobalData(advertismentId) {
   advertismentData.splice(advertismentIndex, 1);
 }
 
-function editRow(event) {
+async function editRow(event) {
   const editButtonId = event.currentTarget.id; // btn_edit_XXX
   const advertismentId = $('#' + editButtonId).attr("adv-id");
   const advertismentTrId = TR_ID_PREFIX + advertismentId;
@@ -57,10 +57,47 @@ function editRow(event) {
     const allRowData = readRowData(advertismentTrId);  
     const originalAdvData = advertismentData.filter(adv => adv._id == advertismentId)[0];
 
-    console.log(getDataDiff(allRowData, originalAdvData));
+    const advertismentDataToUpdate = getDataDiff(allRowData, originalAdvData);
+    if (jQuery.isEmptyObject(advertismentDataToUpdate)) {
+      // Nothing to update
+      return;
+    }
+    
+    await updateAdvertismentRequest(advertismentId, advertismentDataToUpdate).then(
+      updateAdvertismentDataInGlobalState(
+        advertismentId,
+        advertismentDataToUpdate
+      )
+    );
 
     advState = false;
   }
+}
+
+function updateAdvertismentDataInGlobalState(advertismentId, advertismentDataToUpdate) {
+  const advertismentIndex = advertismentData
+    .map((adv) => adv._id)
+    .indexOf(advertismentId);
+
+  for (const [updateKey, updateValue] of Object.entries(advertismentDataToUpdate)) {
+    advertismentData[advertismentIndex][updateKey] = updateValue;
+  }
+  console.log(`Update page global state: ID=${advertismentId} values:${JSON.stringify(advertismentDataToUpdate)}`);
+}
+
+async function updateAdvertismentRequest(advertismentId, advertismentData) {
+  const serverApi = "http://" + SERVER + "/advertisment?id=" + advertismentId;
+
+  return fetch(serverApi, {
+    method: "PUT",
+    headers: {
+      "x-api-key": localStorage.getItem("Advertisment-token") || "",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      advertismentData: advertismentData,
+    }),
+  });
 }
 
 function getDataDiff(updatedAdvData, originalAdvData) {

@@ -79,7 +79,7 @@ const configuration =
         },
         {
             "screenId": 2,
-            "name": "cyber course",
+            "name": "Cyber course",
             "template": "B",
             "length": 5,
             "timeFrame": [{
@@ -117,7 +117,7 @@ const configuration =
         },
         {
             "screenId": 2,
-            "name": "coca cola",
+            "name": "Coca cola",
             "template": "A",
             "length": 4,
             "timeFrame": [{
@@ -132,7 +132,7 @@ const configuration =
                 }
             }],
             "images": ["7.jpg"],
-            "text": ["coca cola O_O"]
+            "text": ["Coca cola O_O"]
         }
     ];
     const admins =

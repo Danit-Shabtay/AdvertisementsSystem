@@ -183,16 +183,6 @@ server.post('/changePassword',checkToken,urlEncodedParser, async function(req,re
 
   });
 
-  server.get('/admin', (req, res) => {
-    website = path.join(__dirname, "../client/Admin.html");
-    return res.sendFile(website);
-});
-
-server.get('/changePassword', (req, res) => {
-    website = path.join(__dirname, "../client/changePassword.html");
-    return res.sendFile(website);
-});
-
 
 /**
     Define the public directory of the system.

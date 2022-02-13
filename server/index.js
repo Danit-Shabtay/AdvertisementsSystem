@@ -198,13 +198,17 @@ server.put("/advertisment", async (req, res) => {
 server.post("/advertisment", async (req, res) => {
   const advertismentDataToAdd = req.body.advertismentData;
 
-  await addAdvertisment(advertismentDataToAdd);
+  let advId = "";
+  await addAdvertisment(advertismentDataToAdd).
+    then((adv) => {
+      advId = adv._id;
+    });
 
-  print(
-    `Add new advertisment with data: ${JSON.stringify(advertismentDataToAdd)}`
-  );
+  print(`Add new advertisment with data: ${JSON.stringify(advertismentDataToAdd)}`);
 
-  return res.sendStatus(200);
+  return res.json({
+    id: advId
+  });
 });
 
 server.get("/adminAd", checkToken, async (req, res) => {

@@ -279,6 +279,20 @@ function readRowData(trId) {
   startDate=startDate.slice(-4)+"-"+startDate.slice(3,5)+"-"+startDate.slice(0,2);//Cast to server date format
   var endDate=data["date-end"];
   endDate=endDate.slice(-4)+"-"+endDate.slice(3,5)+"-"+endDate.slice(0,2);//Cast to server date format
+  var startTime=data["time-start"];
+  if(startTime.length==8){//Cast to server time format
+    startTime="2000-01-01T"+startTime;
+  }
+  else{
+    startTime="2000-01-01T0"+startTime;
+  }
+  var endTime=data["time-end"];
+  if(endTime.length==8){//Cast to server time format
+    endTime="2000-01-01T"+endTime;
+  }
+  else{
+    endTime="2000-01-01T0"+endTime;
+  }
   // convert to nested objects:
   data["timeFrame"] = {
     dates: {
@@ -287,8 +301,8 @@ function readRowData(trId) {
     },
     days: data["days"].split(",").map((i) => Number(i)),
     time: {
-      start: "2000-01-01T"+data["time-start"],//Cast to server time format
-      end: "2000-01-01T"+data["time-end"],//Cast to server time format
+      start: startTime,
+      end: endTime,
     },
   };
 

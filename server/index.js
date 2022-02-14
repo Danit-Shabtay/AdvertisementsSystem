@@ -198,16 +198,16 @@ server.put("/advertisment", async (req, res) => {
 server.post("/advertisment", async (req, res) => {
   const advertismentDataToAdd = req.body.advertismentData;
 
-  let advId = "";
+  let newAdvertisment = NaN;
   await addAdvertisment(advertismentDataToAdd).
     then((adv) => {
-      advId = adv._id;
+      newAdvertisment = adv;
     });
 
   print(`Add new advertisment with data: ${JSON.stringify(advertismentDataToAdd)}`);
 
   return res.json({
-    id: advId
+    advertismentData: newAdvertisment,
   });
 });
 

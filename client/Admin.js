@@ -10,10 +10,8 @@ const INVALID_TD_INDEX = -1;
 let advEditGlobalState = false;
 let advertismentGlobalData = [];
 let advAddGlobalState = false;
-//let newAdvTrIndex = INVALID_TD_INDEX;
 
 async function addAdvertismentHandler() {
-  console.log("Add pressed!");
 
   // Enter add row state:
   if (!advAddGlobalState) {
@@ -30,20 +28,51 @@ async function addAdvertismentHandler() {
 
     const allRowData = readRowData(TR_NEW_ID);
 
+    // Call server API request to add new adv:
+    let newAdv = "";
     await addAdvertismentRequest(allRowData)
-      .then(res => res.json())
-      .then(data => console.log(`new ID=${data["id"]}`));
+      .then((res) => res.json())
+      .then((data) => {
+        newAdv = data["advertismentData"];
+      });
 
-    // Call server API request to add new adv
+    const newAdvId = newAdv._id;
+    console.log(`New Advertisment ID received, ID=${newAdvId}`);
 
     // Update table row:
-    //  Add controllers
-    //  Update IDs
-    
+    const trNewId = TR_ID_PREFIX + newAdvId;
+
+    setIdToTd(TR_NEW_ID, trNewId);
+    setAdvIdToTd(newAdvId);
+    addControllersToTr(trNewId, newAdvId);
+
     // Add new adv to global state
+    addNewAdvToGlobalData(newAdv);
 
     advAddGlobalState = false;
   }
+}
+
+function addNewAdvToGlobalData(newAdv) {
+  advertismentGlobalData.push(newAdv);
+}
+
+function addControllersToTr(trId, newAdvId) {
+  $('#' + trId).each ((trIndex, tr) => {
+    $(tr).children('td').each((tdIndex, td) => {
+      const controllersAttribute = $(td).attr("controllers");
+      if (typeof controllersAttribute !== 'undefined' && controllersAttribute !== false) {
+        let content = '';
+        
+        content += '<button id="' + BTN_DELETE_ID_PREFIX + newAdvId + '" adv-id="' + newAdvId + '"><img src="/resources/delete_btn.png"/></button>';
+        content += '<button id="' + BTN_EDIT_ID_PREFIX + newAdvId + '" adv-id="' + newAdvId + '"><img src="/resources/edit_btn.png"/></button>';
+        
+        $(td).append(content);
+        $("#" + BTN_DELETE_ID_PREFIX + newAdvId).on("click", deleteAdvertismentHandler);
+        $("#" + BTN_EDIT_ID_PREFIX + newAdvId).on("click", editRowHandler);
+      }
+     });
+  });
 }
 
 /**
@@ -52,31 +81,22 @@ async function addAdvertismentHandler() {
 function insertNewEmptyRow() {
   let content = "";
   content += '<tr id="' + TR_NEW_ID + '">';
-  content += '<td contenteditable="false">';
-  //content += '<button id="' + BTN_DELETE_ID_PREFIX + '" adv-id="' +  '"> <img src="/resources/delete_btn.png" /></button>';
-  //content += '<button id="' + BTN_EDIT_ID_PREFIX + '" adv-id="' +  '"> <img src="/resources/edit_btn.png" /></button>';
-  content += '</td >';
-  content += '<td contenteditable="false" adv-property="name">' + '</td>';
-  content += '<td contenteditable="false" adv-property="screenId">' + '</td>';
-  content += '<td contenteditable="false" adv-property="template">' + '</td>';
-  content += '<td contenteditable="false" adv-property="length">' + '</td>';
-  content += '<td contenteditable="false" adv-property="date-start">' + '</td>';
-  content += '<td contenteditable="false" adv-property="date-end">' + '</td>';
-  content += '<td contenteditable="false" adv-property="time-start">' + '</td>';
-  content += '<td contenteditable="false" adv-property="time-end">' + '</td>';
-  content += '<td contenteditable="false" adv-property="days">' + '</td>';
-  content += '<td contenteditable="false" adv-property="text">' + '</td>';
-  content += '<td contenteditable="false" adv-property="photo-name">' + '</td>';
+  content += '<td controllers contenteditable="false"></td >';
+  content += '<td contenteditable="false" adv-property="name"></td>';
+  content += '<td contenteditable="false" adv-property="screenId"></td>';
+  content += '<td contenteditable="false" adv-property="template"></td>';
+  content += '<td contenteditable="false" adv-property="length"></td>';
+  content += '<td contenteditable="false" adv-property="date-start"></td>';
+  content += '<td contenteditable="false" adv-property="date-end"></td>';
+  content += '<td contenteditable="false" adv-property="time-start"></td>';
+  content += '<td contenteditable="false" adv-property="time-end"></td>';
+  content += '<td contenteditable="false" adv-property="days"></td>';
+  content += '<td contenteditable="false" adv-property="text"></td>';
+  content += '<td contenteditable="false" adv-property="images"></td>';
   content += '</tr>';
   
   $("#adsTable").append(content);
 }
-
-/*
-function addControllersToTr(trId) {
-  $("#" + trId).
-}
-*/
 
 function deleteAdvertismentHandler(event) {
   const deleteButtonId = event.currentTarget.id;
@@ -108,7 +128,7 @@ function deleteAdverismentFromGlobalData(advertismentId) {
   advertismentGlobalData.splice(advertismentIndex, 1);
 }
 
-async function editRow(event) {
+async function editRowHandler(event) {
   const editButtonId = event.currentTarget.id; // btn_edit_XXX
   const advertismentId = $('#' + editButtonId).attr("adv-id");
   const advertismentTrId = TR_ID_PREFIX + advertismentId;
@@ -224,8 +244,12 @@ function getIdFromTd(trId) {
   return $("#" + trId).attr("adv-id");
 }
 
-function setIdToTd(originalTrId, newIdValue) {
-  $("#" + originalTrId).attr("adv-id", newIdValue);
+function setIdToTd(originalTrId, newTdIdValue) {
+  $("#" + originalTrId).attr("id", newTdIdValue);
+}
+
+function setAdvIdToTd(originalTrId, newAdvIdValue) {
+  $("#" + originalTrId).attr("adv-id", newAdvIdValue);
 }
 
 function readRowData(trId) {
@@ -243,7 +267,26 @@ function readRowData(trId) {
       }
 
      });
-  }); 
+  });
+
+  // Fix special properties to support arrays members 
+  // and nested objects in the advertisment objec:
+
+  // convert to array:
+  data["images"] = [data["images"]];
+
+  // convert to nested objects:
+  data["timeFrame"] = {
+    dates: {
+      start: data["date-start"],
+      end: data["date-end"],
+    },
+    days: data["days"].split(",").map((i) => Number(i)),
+    time: {
+      start: data["time-start"],
+      end: data["time-end"],
+    },
+  };
 
   return data;
 }
@@ -288,6 +331,24 @@ function getTimeFrameDays(arr, index) {
   }
 }
 
+function getScreenIdValue(arr, index) {
+  try {
+    const value = arr[index].screenId;
+    return (value != null) ? value : "";
+  } catch (error) {
+    return "";
+  }
+}
+
+function getLengthValue(arr, index) {
+  try {
+    const value = arr[index].length;
+    return (value != null) ? value : "";
+  } catch (error) {
+    return "";
+  }
+}
+
 $(document).ready(function () {
   fetch('http://' + SERVER + "/adminAd?id=0", {
     headers: {
@@ -302,14 +363,14 @@ $(document).ready(function () {
         // 'adv-property' is our special attribute to indicates for each table-data who is the 
         // corresponding key in the advertisment.
         content += '<tr id="' + TR_ID_PREFIX + data[i]._id + '" adv-id="' + data[i]._id + '">';
-        content += '<td contenteditable="false">';
+        content += '<td controllers contenteditable="false">';
         content += '<button id="' + BTN_DELETE_ID_PREFIX + data[i]._id + '" adv-id="' + data[i]._id + '"> <img src="/resources/delete_btn.png" /></button>';
         content += '<button id="' + BTN_EDIT_ID_PREFIX + data[i]._id + '" adv-id="' + data[i]._id + '"> <img src="/resources/edit_btn.png" /></button>';
         content += '</td > ';
         content += '<td contenteditable="false" adv-property="name">' + data[i].name + '</td>';
-        content += '<td contenteditable="false" adv-property="screenId">' + data[i].screenId + '</td>';
+        content += '<td contenteditable="false" adv-property="screenId">' + getScreenIdValue(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="template">' + data[i].template + '</td>';
-        content += '<td contenteditable="false" adv-property="length">' + data[i].length + '</td>';
+        content += '<td contenteditable="false" adv-property="length">' + getLengthValue(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="date-start">' + getDateStart(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="date-end">' + getDateEnd(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="time-start">' + getTimeStart(data, i) + '</td>';
@@ -325,7 +386,7 @@ $(document).ready(function () {
 
       // Add events to table buttons:
       for (var i = 0; i < data.length; i++) {
-        $('#' + BTN_EDIT_ID_PREFIX + data[i]._id).on("click", editRow);
+        $("#" + BTN_EDIT_ID_PREFIX + data[i]._id).on("click", editRowHandler);
         $('#' + BTN_DELETE_ID_PREFIX + data[i]._id).on("click", deleteAdvertismentHandler);
       }
 

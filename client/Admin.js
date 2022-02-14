@@ -275,16 +275,20 @@ function readRowData(trId) {
   // convert to array:
   data["images"] = [data["images"]];
 
+  var startDate=data["date-start"];
+  startDate=startDate.slice(-4)+"-"+startDate.slice(3,5)+"-"+startDate.slice(0,2);//Cast to server date format
+  var endDate=data["date-end"];
+  endDate=endDate.slice(-4)+"-"+endDate.slice(3,5)+"-"+endDate.slice(0,2);//Cast to server date format
   // convert to nested objects:
   data["timeFrame"] = {
     dates: {
-      start: data["date-start"],
-      end: data["date-end"],
+      start: startDate,
+      end: endDate,
     },
     days: data["days"].split(",").map((i) => Number(i)),
     time: {
-      start: data["time-start"],
-      end: data["time-end"],
+      start: "2000-01-01T"+data["time-start"],//Cast to server time format
+      end: "2000-01-01T"+data["time-end"],//Cast to server time format
     },
   };
 
@@ -309,7 +313,7 @@ function getDateEnd(arr, index) {
 
 function getTimeStart(arr, index) {
   try {
-    return new Date(arr[index].timeFrame[0].time.start).toLocaleDateString();
+    return new Date(arr[index].timeFrame[0].time.start).toLocaleTimeString();
   } catch (error) {
     return "";
   }
@@ -317,7 +321,7 @@ function getTimeStart(arr, index) {
 
 function getTimeEnd(arr, index) {
   try {
-    return new Date(arr[index].timeFrame[0].time.end).toLocaleDateString();
+    return new Date(arr[index].timeFrame[0].time.end).toLocaleTimeString();
   } catch (error) {
     return "";
   }
@@ -374,7 +378,7 @@ $(document).ready(function () {
         content += '<td contenteditable="false" adv-property="date-start">' + getDateStart(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="date-end">' + getDateEnd(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="time-start">' + getTimeStart(data, i) + '</td>';
-        content += '<td contenteditable="false" adv-property="time-end">' + getTimeStart(data, i) + '</td>';
+        content += '<td contenteditable="false" adv-property="time-end">' + getTimeEnd(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="days">' + getTimeFrameDays(data, i) + '</td>';
         content += '<td contenteditable="false" adv-property="text">' + data[i].text + '</td>';
         content += '<td contenteditable="false" adv-property="images">' + data[i].images + '</td>';

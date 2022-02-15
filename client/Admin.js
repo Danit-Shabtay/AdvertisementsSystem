@@ -311,7 +311,10 @@ function readRowData(trId) {
 
 function getDateStart(arr, index) {
   try {
-    return new Date(arr[index].timeFrame[0].dates.start).toLocaleDateString();
+    var date=new Date(arr[index].timeFrame[0].dates.start);
+    return ('0' + date.getDate()).slice(-2) + '/'
+             + ('0' + (date.getMonth()+1)).slice(-2) + '/'
+             + date.getFullYear();
   } catch (error) {
     return "";
   }
@@ -319,7 +322,10 @@ function getDateStart(arr, index) {
 
 function getDateEnd(arr, index) {
   try {
-    return new Date(arr[index].timeFrame[0].dates.end).toLocaleDateString();
+    var date=new Date(arr[index].timeFrame[0].dates.end);
+    return ('0' + date.getDate()).slice(-2) + '/'
+             + ('0' + (date.getMonth()+1)).slice(-2) + '/'
+             + date.getFullYear();
   } catch (error) {
     return "";
   }

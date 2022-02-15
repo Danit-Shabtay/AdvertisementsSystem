@@ -2,81 +2,13 @@
 form {
   border: 3px solid #fff;
 }
-body {
+ body {
   font-family: Arial, Helvetica, sans-serif;
-}
-.container {
-  text-align: left;
-  margin: 0 auto;
-}
-
-.alert {
-  font-size: 20px;
-  font-weight: bold;
-  font-family: Arial, Helvetica, sans-serif;
-  color: black;
-}
-
-/* Full-width inputs */
-#username,
-#psw {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-/* Set a style for all buttons */
-.loginbtn {
-  background-color: #04aa6d;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
-
-/* Add a hover effect for buttons */
+} 
 button:hover {
   opacity: 0.8;
 }
 
-/* Center the avatar image inside this container */
-.imgcontainer {
-  /* text-align: center; */
-  display: block;
-  margin: 0 auto;
-  padding-top: 10px;
-  width: 50%;
-}
-
-/* Avatar image */
-img.avatar {
-  width: 40%;
-  border-radius: 50%;
-}
-
-/* Add padding to containers */
-.container {
-  padding: 16px;
-}
-
-/* The "Forgot password" text */
-span.psw {
-  float: right;
-  padding-top: 16px;
-}
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-  span.psw {
-    display: block;
-    float: none;
-  }
-}
 /* admin page style  */
 
 table {
@@ -85,7 +17,7 @@ table {
   border: 1px solid black;
 }
 
-h1 {
+.adminTitle {
   text-align: center;
   color: #006600;
   font-size: xx-large;
@@ -120,8 +52,113 @@ td {
   text-align: center;
 }
 
+/* login and change password screens */
+.container {
+  background: #ABCDEF;
+  font-family: Assistant, sans-serif;
+  display: flex;
+  min-height: 90vh;
+}
+
+.login {
+  color: white;
+  background: #136a8a;
+  background: 
+    -webkit-linear-gradient(to right, #267871, #136a8a);
+  background: 
+    linear-gradient(to right, #267871, #136a8a);
+  margin: auto;
+  box-shadow: 
+    0px 2px 10px rgba(0,0,0,0.2), 
+    0px 10px 20px rgba(0,0,0,0.3), 
+    0px 30px 60px 1px rgba(0,0,0,0.5);
+  border-radius: 8px;
+  padding: 50px;
+}
+.login .head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login .head .company {
+  font-size: 2.2em;
+}
+.login .msg {
+  text-align: center;
+}
+.login .form input[type=text].text {
+  border: none;
+  background: none;
+  box-shadow: 0px 2px 0px 0px white;
+  width: 100%;
+  color: white;
+  font-size: 1em;
+  outline: none;
+}
+.login .form .text::placeholder {
+  color: #D3D3D3;
+}
+.login .form input[type=password].password {
+  border: none;
+  background: none;
+  box-shadow: 0px 2px 0px 0px white;
+  width: 100%;
+  color: white;
+  font-size: 1em;
+  outline: none;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.login .form .password::placeholder {
+  color: #D3D3D3;
+}
+.login .form .btn-login {
+  background: none;
+  text-decoration: none;
+  color: white;
+  box-shadow: 0px 0px 0px 2px white;
+  border-radius: 3px;
+  padding: 5px 2em;
+  transition: 0.5s;
+}
+.login .form .btn-login:hover {
+  background: white;
+  color: dimgray;
+  transition: 0.5s;
+}
+
+
+
+
+/* Add a hover effect for buttons */
+
+/* .imgcontainer {
+  display: block;
+  margin: 0 auto;
+  padding-top: 10px;
+  width: 50%;
+} */
+
+/* .container {
+  padding: 16px;
+} */
+
+/* The "Forgot password" text */
+/* span.psw {
+  float: right;
+  padding-top: 16px;
+} */
+
+/* Change styles for span and cancel button on extra small screens */
+/* @media screen and (max-width: 300px) {
+  span.psw {
+    display: block;
+    float: none;
+  }
+} */
+
 /* change password screen */
-.mainDiv {
+/* .mainDiv {
   display: flex;
   min-height: 100%;
   align-items: center;
@@ -136,15 +173,14 @@ td {
   border-radius: 4px;
   margin: 30px 0;
 
-  /* box-shadow: 0px 0 2px 0 rgba(0,0,0,0.25); */
-}
+} */
 /* #signupLogo {
 max-height: 100px;
 margin: auto;
 display: flex;
 flex-direction: column;
 } */
-.formTitle {
+/* .formTitle {
   font-weight: 600;
   margin-top: 20px;
   margin-bottom: 30px;
@@ -162,8 +198,8 @@ flex-direction: column;
   display: flex;
   flex-direction: column;
   margin: auto;
-}
-input {
+} */
+/* input {
   height: 40px;
   font-size: 16px;
   border-radius: 4px;
@@ -173,12 +209,12 @@ input {
 }
 input:disabled {
   cursor: not-allowed;
-  border: solid 1px #eee;
-}
-.buttonWrapper {
+  border: solid 1px #eee; */
+
+/* .buttonWrapper {
   margin-top: 40px;
-}
-.submitButton {
+} */
+/* .submitButton {
   width: 70%;
   height: 40px;
   margin: auto;
@@ -191,15 +227,15 @@ input:disabled {
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
-}
-.submitButton:disabled,
+} */
+/* .submitButton:disabled,
 button[disabled] {
   border: 1px solid #cccccc;
   background-color: #cccccc;
   color: #666666;
-}
+} */
 
-#loader {
+/* #loader {
   position: absolute;
   z-index: 1;
   margin: -2px 0 0 10px;
@@ -210,8 +246,8 @@ button[disabled] {
   height: 14px;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
-}
-
+} */
+/* 
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -219,9 +255,4 @@ button[disabled] {
   100% {
     transform: rotate(360deg);
   }
-}
-
-#submitButton {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-}
+} */

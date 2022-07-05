@@ -17,14 +17,18 @@ Automatic system for displaying messages on advertising screens.
 ---
 
 ### Demo
+
+##### Screen number 1
 <img src="Demo1.gif" width=650>
 
 ---
 
+##### Screen number 2
 <img src="Demo2.gif" width=650>
 
 ---
 
+##### Screen number 3
 <img src="Demo3.gif" width=650>
 
 ---
